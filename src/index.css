@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-primary: 37 99 235;
+  --color-primary-dark: 29 78 216;
+
+  --color-background-light: 248 250 252;
+  --color-background-dark: 2 6 23;
+
+  --color-surface-light: 255 255 255;
+  --color-surface-dark: 30 41 59;
+
+  --color-border-light: 226 232 240;
+  --color-border-dark: 51 65 85;
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in {
+  animation: slide-in 0.3s ease-out;
+}
