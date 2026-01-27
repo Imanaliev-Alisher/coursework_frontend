@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useUsers } from '@/shared/hooks';
 
 export function AdminUsersPage() {
@@ -49,6 +50,7 @@ export function AdminUsersPage() {
                     <th className="p-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Email</th>
                     <th className="p-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Роль</th>
                     <th className="p-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Статус</th>
+                    <th className="p-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-right">Действия</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
@@ -83,6 +85,15 @@ export function AdminUsersPage() {
                         }`}>
                           {user.is_active ? 'Активен' : 'Неактивен'}
                         </div>
+                      </td>
+                      <td className="p-4 text-right">
+                        <Link
+                          to={`/admin/users/${user.id}`}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
+                        >
+                          <span className="material-symbols-outlined text-[18px]">visibility</span>
+                          Просмотр
+                        </Link>
                       </td>
                     </tr>
                   ))}

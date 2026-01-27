@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { groupsApi } from '@/shared/api';
-import type { StudyGroupCreateUpdateRequest } from '@/shared/api';
+import type { StudyGroupCreateRequest } from '@/features/schedule/types';
 
 export const GROUPS_QUERY_KEY = 'groups';
 
@@ -32,7 +32,7 @@ export function useCreateGroup() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: StudyGroupCreateUpdateRequest) => groupsApi.create(data),
+    mutationFn: (data: StudyGroupCreateRequest) => groupsApi.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [GROUPS_QUERY_KEY] });
     },
@@ -46,7 +46,7 @@ export function useUpdateGroup() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, data }: { id: number; data: StudyGroupCreateUpdateRequest }) =>
+    mutationFn: ({ id, data }: { id: number; data: StudyGroupCreateRequest }) =>
       groupsApi.update(id, data),
     onSuccess: (_data, variables) => {
       queryClient.invalidateQueries({ queryKey: [GROUPS_QUERY_KEY] });

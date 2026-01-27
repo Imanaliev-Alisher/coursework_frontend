@@ -15,11 +15,18 @@ Frontend приложение для автоматизированной инф
 
 ## Требования
 
+### Локальная разработка
 - Node.js >= 18
 - pnpm (рекомендуется) или npm
-- Бэкенд API запущен на `http://localhost:8000`
+- Бэкенд API запущен на `http://localhost:8888`
 
-## Установка
+### Docker
+- Docker >= 20.10
+- Docker Compose >= 2.0
+
+## Установка и запуск
+
+### Вариант 1: Локальная разработка
 
 1. Клонируйте репозиторий:
 ```bash
@@ -37,28 +44,69 @@ pnpm install
 cp .env.example .env
 ```
 
-4. Убедитесь, что бэкенд запущен на `http://localhost:8000`
+4. Убедитесь, что бэкенд запущен на `http://localhost:8888`
 
-## Запуск
-
-### Режим разработки
-
+5. Запустите dev-сервер:
 ```bash
 pnpm dev
 ```
 
 Приложение будет доступно по адресу: http://localhost:5173
 
-### Сборка для продакшена
+### Вариант 2: Docker (Production)
 
+1. Соберите и запустите контейнеры:
+```bash
+docker-compose up -d --build
+```
+
+Приложение будет доступно по адресу: http://localhost:3000
+
+2. Остановка контейнеров:
+```bash
+docker-compose down
+```
+
+### Вариант 3: Docker (Development с Hot Reload)
+
+1. Запустите dev-контейнер:
+```bash
+docker-compose -f docker-compose.dev.yml up -d --build
+```
+
+Приложение будет доступно по адресу: http://localhost:5173
+- Изменения в коде автоматически применяются (hot reload)
+
+2. Просмотр логов:
+```bash
+docker-compose -f docker-compose.dev.yml logs -f frontend-dev
+```
+
+3. Остановка:
+```bash
+docker-compose -f docker-compose.dev.yml down
+```
+
+### Другие команды
+
+#### Локальная сборка
 ```bash
 pnpm build
 ```
 
-### Предпросмотр продакшен-сборки
-
+#### Предпросмотр продакшен-сборки
 ```bash
 pnpm preview
+```
+
+#### Docker: пересборка без кэша
+```bash
+docker-compose build --no-cache
+```
+
+#### Docker: просмотр логов
+```bash
+docker-compose logs -f frontend
 ```
 
 ## Структура проекта
@@ -187,6 +235,28 @@ function SchedulePage() {
 
 ## Архитектурные решения
 
+### Docker конфигурация
+
+**Production** (`Dockerfile` + `docker-compose.yml`):
+- Multi-stage build для оптимизации размера образа
+- Nginx для раздачи статики
+- Gzip сжатие и кэширование
+- Безопасные HTTP заголовки
+- SPA fallback для роутинга
+
+**Development** (`Dockerfile.dev` + `docker-compose.dev.yml`):
+- Hot reload при изменении файлов
+- Volume mapping для исходного кода
+- Dev-сервер Vite на порту 5173
+
+**Файлы конфигурации**:
+- `docker-compose.yml` - production окружение (порт 3000)
+- `docker-compose.dev.yml` - development окружение (порт 5173)
+- `.dockerignore` - исключения при сборке образа
+- `compose/Dockerfile` - production образ с Nginx
+- `compose/Dockerfile.dev` - development образ с Vite dev-server
+- `compose/nginx.conf` - конфигурация Nginx для SPA
+
 ### Code Review фиксы
 В проекте были применены следующие улучшения безопасности и производительности:
 - ✅ Замена `alert()` на систему Toast уведомлений
@@ -197,6 +267,7 @@ function SchedulePage() {
 - ✅ Оптимизация с useCallback/useMemo
 - ✅ QueryClient вынесен из компонента
 - ✅ Error Boundary для глобальной обработки ошибок
+- ✅ Константы вместо магических строк
 - ✅ Константы вместо магических строк
 - Детальные сообщения об ошибках в dev режиме
 
@@ -236,11 +307,11 @@ function SchedulePage() {
 
 | Переменная | Описание | По умолчанию |
 |------------|----------|--------------|
-| `VITE_API_BASE_URL` | URL бэкенд API | `http://localhost:8000/api/v1` |
+| `VITE_API_BASE_URL` | URL бэкенд API | `http://localhost:8888/api/v1` |
 
 ## Ссылки
 
 - [Бэкенд репозиторий](https://github.com/Imanaliev-Alisher/coursework)
-- [API документация](http://localhost:8000/api/docs/)
+- [API документация](http://localhost:8888/api/docs/)
 - [React Query документация](https://tanstack.com/query/latest)
 - [Tailwind CSS документация](https://tailwindcss.com/docs)

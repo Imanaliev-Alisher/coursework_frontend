@@ -1,4 +1,5 @@
 import { useTeachers } from '@/shared/hooks';
+import { Link } from 'react-router-dom';
 
 export function AdminTeachersPage() {
   const { data: teachersData, isLoading } = useTeachers();
@@ -53,15 +54,18 @@ export function AdminTeachersPage() {
                         <div className="text-sm text-slate-500 dark:text-slate-400">{teacher.department || '-'}</div>
                       </td>
                       <td className="p-4">
-                        <div className="text-sm text-slate-500 dark:text-slate-400">{teacher.cabinet || '-'}</div>
+                        <div className="text-sm text-slate-500 dark:text-slate-400">{teacher.cabinet || teacher.office || '-'}</div>
                       </td>
                       <td className="p-4">
-                        <div className="text-sm text-slate-500 dark:text-slate-400">{teacher.phone_number || '-'}</div>
+                        <div className="text-sm text-slate-500 dark:text-slate-400">{teacher.phone_number || teacher.phone || '-'}</div>
                       </td>
                       <td className="p-4 text-right">
-                        <button className="text-primary hover:underline text-sm font-medium">
-                          Редактировать
-                        </button>
+                        <Link 
+                          to={`/teachers/${teacher.id}`}
+                          className="text-primary hover:underline text-sm font-medium"
+                        >
+                          Просмотр
+                        </Link>
                       </td>
                     </tr>
                   ))}

@@ -1,12 +1,27 @@
+import { useState } from 'react';
 import { useAudiences } from '@/shared/hooks';
 
 export function RoomsPage() {
-  const { data: audiencesData, isLoading } = useAudiences();
+  const [searchQuery, setSearchQuery] = useState('');
+  const { data: audiencesData, isLoading } = useAudiences({ search: searchQuery });
 
   return (
     <div className="flex-1 overflow-y-auto p-6">
       <div className="max-w-[1400px] mx-auto">
         <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white mb-6">Аудитории</h2>
+        
+        <div className="mb-6">
+          <div className="relative">
+            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">search</span>
+            <input
+              className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-[#1e2936] border border-slate-200 dark:border-slate-700 rounded-lg text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:ring-2 focus:ring-primary/50 transition-all"
+              placeholder="Поиск по номеру, зданию..."
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+        </div>
         
         {isLoading ? (
           <div className="bg-white dark:bg-[#1e2936] rounded-xl border border-slate-200 dark:border-slate-700 p-12 text-center">
@@ -30,7 +45,7 @@ export function RoomsPage() {
                     </div>
                     <div>
                       <h3 className="text-lg font-bold text-slate-900 dark:text-white">{audience.title}</h3>
-                      <p className="text-sm text-slate-500 dark:text-slate-400">{audience.type_name}</p>
+                      <p className="text-sm text-slate-500 dark:text-slate-400">{audience.type_name || audience.auditorium_type_name}</p>
                     </div>
                   </div>
                 </div>
@@ -38,10 +53,6 @@ export function RoomsPage() {
                   <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
                     <span className="material-symbols-outlined text-[18px] text-slate-400">business</span>
                     {audience.building_name}
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
-                    <span className="material-symbols-outlined text-[18px] text-slate-400">group</span>
-                    Вместимость: {audience.capacity} чел.
                   </div>
                 </div>
               </div>

@@ -1,0 +1,30 @@
+services:
+
+  frontend-dev:
+    build:
+      context: .
+      dockerfile: compose/Dockerfile.dev
+    container_name: aes-frontend-dev
+    ports:
+      - "5173:5173"
+    volumes:
+      # Монтируем исходный код для hot reload
+      - ./src:/app/src
+      - ./public:/app/public
+      - ./index.html:/app/index.html
+      - ./vite.config.ts:/app/vite.config.ts
+      - ./tailwind.config.ts:/app/tailwind.config.ts
+      - ./postcss.config.js:/app/postcss.config.js
+      - ./tsconfig.json:/app/tsconfig.json
+      - ./tsconfig.app.json:/app/tsconfig.app.json
+      # Исключаем node_modules (используем из контейнера)
+      - /app/node_modules
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8888/api/v1
+    restart: unless-stopped
+    networks:
+      - aes-network
+
+networks:
+  aes-network:
+    driver: bridge

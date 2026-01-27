@@ -29,15 +29,15 @@ export function UserSchedulePage() {
   }, []);
 
   const { data: groupsData, isLoading: isLoadingGroups } = useGroups();
-  const { data: timetable, isLoading: isLoadingTimetable } = useGroupTimetable(selectedGroupId);
+  const { data: timetable, isLoading: isLoadingTimetable, dataUpdatedAt } = useGroupTimetable(selectedGroupId);
   const { data: audiencesData } = useAudiences();
   const { data: currentUser } = useCurrentUser();
 
-  const isAdmin = currentUser?.is_staff || currentUser?.role === 'STAFF';
+  const isAdmin = currentUser?.is_staff;
   const isStudent = currentUser?.role === 'STUDENT';
 
   // Получаем данные студента, если текущий пользователь - студент
-  const { data: studentData } = useStudent(isStudent ? currentUser?.id : undefined);
+  const { data: studentData } = useStudent(isStudent && currentUser?.id ? currentUser.id : 0);
 
   // Автоматический выбор группы для студента
   useEffect(() => {
@@ -60,14 +60,14 @@ export function UserSchedulePage() {
 
   // Фильтрация расписания
   const filteredTimetable = useMemo(() => {
-    if (!timetable) return [];
+    if (!timetable || !Array.isArray(timetable)) return [];
 
-    return timetable.filter((entry) => {
+    return timetable.filter((entry: any) => {
       // Фильтр по типу недели
       if (weekType !== 'all') {
-        const weekTypeValue = entry.week_type || entry.week_parity;
-        if (weekTypeValue && weekTypeValue !== WEEK_TYPES.ALL) {
-          const normalizedWeekType = weekTypeValue === WEEK_TYPES.ODD || weekTypeValue === WEEK_TYPES.ODD_EN ? 'odd' : 'even';
+        const weekTypeValue = entry.week_type;
+        if (weekTypeValue && weekTypeValue !== 'Все') {
+          const normalizedWeekType = weekTypeValue === 'Нечетные' ? 'odd' : 'even';
           if (normalizedWeekType !== weekType) {
             return false;
           }
@@ -75,22 +75,22 @@ export function UserSchedulePage() {
       }
 
       // Фильтр по предмету
-      if (selectedSubject && entry.subject !== selectedSubject) {
+      if (selectedSubject && entry.subject_title !== selectedSubject) {
         return false;
       }
 
       // Фильтр по аудитории
-      if (selectedAudienceId && entry.audience !== selectedAudienceId) {
+      if (selectedAudienceId && entry.audience_details?.title !== selectedAudienceId) {
         return false;
       }
 
       return true;
     });
-  }, [timetable, weekType, selectedSubject, selectedAudienceId]);
+  }, [timetable, weekType, selectedSubject, selectedAudienceId, dataUpdatedAt]);
 
   // Оптимизированный список уникальных предметов
   const uniqueSubjects = useMemo(() => 
-    [...new Set(timetable?.map(entry => entry.subject))].filter(Boolean),
+    Array.isArray(timetable) ? [...new Set(timetable.map((entry: any) => entry.subject_title))].filter(Boolean) : [],
     [timetable]
   );
 
@@ -104,9 +104,9 @@ export function UserSchedulePage() {
     try {
       const groupTitle = groupsData?.results.find(g => g.id === selectedGroupId)?.title || 'Группа';
       if (format === 'pdf') {
-        exportToPDF(filteredTimetable, groupTitle, weekType);
+        exportToPDF(filteredTimetable as any, groupTitle, weekType);
       } else {
-        exportToExcel(filteredTimetable, groupTitle, weekType);
+        exportToExcel(filteredTimetable as any, groupTitle, weekType);
       }
       showToast('Экспорт завершён', 'success');
     } catch (error) {
@@ -127,24 +127,17 @@ export function UserSchedulePage() {
                 <p className="text-slate-500 dark:text-slate-400 text-sm">Просмотр и управление учебным процессом</p>
               </div>
               <div className="flex gap-2">
-                <button 
-                  className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors disabled:opacity-50" 
-                  type="button"
-                  onClick={handleExportPdf}
-                  disabled={!selectedGroupId}
-                >
-                  <span className="material-symbols-outlined text-[20px]">picture_as_pdf</span>
-                  PDF
-                </button>
-                <button 
-                  className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors disabled:opacity-50" 
-                  type="button"
-                  onClick={handleExportExcel}
-                  disabled={!selectedGroupId}
-                >
-                  <span className="material-symbols-outlined text-[20px]">table_chart</span>
-                  Excel
-                </button>
+                {isAdmin &&
+                  <button 
+                    className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors disabled:opacity-50" 
+                    type="button"
+                    onClick={handleExportExcel}
+                    disabled={!selectedGroupId}
+                  >
+                    <span className="material-symbols-outlined text-[20px]">table_chart</span>
+                    Excel
+                  </button>
+                }
                 {isAdmin && (
                   <Link
                     to="/admin/schedule/new"
@@ -226,7 +219,7 @@ export function UserSchedulePage() {
                     onChange={(e) => setSelectedSubject(e.target.value)}
                   >
                     <option value="">Все предметы</option>
-                    {uniqueSubjects.map((subject) => (
+                    {uniqueSubjects.map((subject: any) => (
                       <option key={subject} value={subject}>
                         {subject}
                       </option>
@@ -281,7 +274,7 @@ export function UserSchedulePage() {
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-7 gap-4">
               {WEEK_DAYS.map((day) => {
-                const dayLessons = filteredTimetable.filter((entry) => entry.day === day);
+                const dayLessons = filteredTimetable.filter((entry: any) => entry.week_day_name === day);
                 return (
                   <div key={day} className="bg-white dark:bg-[#1e2936] rounded-xl shadow-sm overflow-hidden flex flex-col">
                     <div className="bg-primary/10 dark:bg-primary/20 px-4 py-3 border-b border-slate-200 dark:border-slate-700">
@@ -294,22 +287,22 @@ export function UserSchedulePage() {
                           <p className="mt-2 text-xs text-slate-400 dark:text-slate-500">Нет занятий</p>
                         </div>
                       ) : (
-                        dayLessons.map((entry, index) => (
+                        dayLessons.map((entry: any, index: number) => (
                           <div key={index} className="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow">
                             <div className="flex items-start justify-between gap-2 mb-2">
-                              <span className="text-xs font-semibold text-primary">{entry.time_slot}</span>
+                              <span className="text-xs font-semibold text-primary">{entry.time_slot_display || entry.time_slot}</span>
                               {typeBadge(entry.subject_type)}
                             </div>
-                            <h4 className="text-sm font-semibold text-slate-900 dark:text-white mb-1">{entry.subject}</h4>
+                            <h4 className="text-sm font-semibold text-slate-900 dark:text-white mb-1">{entry.subject_title || entry.subject}</h4>
                             <div className="space-y-1">
                               <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
                                 <span className="material-symbols-outlined text-[16px]">meeting_room</span>
-                                <span>{entry.audience}</span>
+                                <span>{entry.audience_details?.title || entry.audience}</span>
                               </div>
-                              {entry.teacher && (
+                              {(entry.teachers_details && entry.teachers_details.length > 0) && (
                                 <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
                                   <span className="material-symbols-outlined text-[16px]">person</span>
-                                  <span>{entry.teacher}</span>
+                                  <span>{entry.teachers_details.map((t: any) => t.full_name).join(', ')}</span>
                                 </div>
                               )}
                             </div>

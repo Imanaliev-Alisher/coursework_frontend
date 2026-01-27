@@ -42,7 +42,7 @@ export function ScheduleViewer() {
         <div>
           {isLoadingTimetable ? (
             <div className="text-center py-8 text-gray-500">Загрузка расписания...</div>
-          ) : timetable && timetable.length > 0 ? (
+          ) : timetable && Array.isArray(timetable) && timetable.length > 0 ? (
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
@@ -68,7 +68,7 @@ export function ScheduleViewer() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {timetable.map((entry, index) => (
+                  {timetable.map((entry: any, index: number) => (
                     <tr key={index}>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         {entry.day}

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/v1';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8888/api/v1';
 
 // Callback для навигации при ошибке авторизации
 let navigationCallback: (() => void) | null = null;
@@ -55,6 +55,7 @@ apiClient.interceptors.response.use(
         // Если обновление токена не удалось, очищаем localStorage
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
+        
         // Перенаправляем на страницу входа через callback
         if (navigationCallback) {
           navigationCallback();

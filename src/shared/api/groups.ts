@@ -1,10 +1,5 @@
 import { apiClient } from './client';
-import type { StudyGroupBrief, StudyGroupDetail, PaginatedResponse } from '@/features/schedule/types';
-
-export type StudyGroupCreateUpdateRequest = {
-  title: string;
-  description: string;
-};
+import type { StudyGroupBrief, StudyGroupDetail, StudyGroupCreateRequest, PaginatedResponse } from '@/features/schedule/types';
 
 export const groupsApi = {
   /**
@@ -12,7 +7,10 @@ export const groupsApi = {
    */
   getAll: async (params?: {
     page?: number;
+    page_size?: number;
     search?: string;
+    is_active?: boolean;
+    course?: number;
     ordering?: string;
   }): Promise<PaginatedResponse<StudyGroupBrief>> => {
     const response = await apiClient.get<PaginatedResponse<StudyGroupBrief>>('/study-groups/', { params });
@@ -30,7 +28,7 @@ export const groupsApi = {
   /**
    * Создать учебную группу
    */
-  create: async (data: StudyGroupCreateUpdateRequest): Promise<StudyGroupDetail> => {
+  create: async (data: StudyGroupCreateRequest): Promise<StudyGroupDetail> => {
     const response = await apiClient.post<StudyGroupDetail>('/study-groups/', data);
     return response.data;
   },
@@ -38,7 +36,7 @@ export const groupsApi = {
   /**
    * Обновить учебную группу
    */
-  update: async (id: number, data: StudyGroupCreateUpdateRequest): Promise<StudyGroupDetail> => {
+  update: async (id: number, data: StudyGroupCreateRequest): Promise<StudyGroupDetail> => {
     const response = await apiClient.put<StudyGroupDetail>(`/study-groups/${id}/`, data);
     return response.data;
   },
@@ -46,7 +44,7 @@ export const groupsApi = {
   /**
    * Частично обновить учебную группу
    */
-  partialUpdate: async (id: number, data: Partial<StudyGroupCreateUpdateRequest>): Promise<StudyGroupDetail> => {
+  partialUpdate: async (id: number, data: Partial<StudyGroupCreateRequest>): Promise<StudyGroupDetail> => {
     const response = await apiClient.patch<StudyGroupDetail>(`/study-groups/${id}/`, data);
     return response.data;
   },
@@ -61,9 +59,9 @@ export const groupsApi = {
   /**
    * Добавить студентов в группу
    */
-  addStudents: async (id: number, studentIds: number[]): Promise<StudyGroupDetail> => {
+  addStudents: async (groupId: number, studentIds: number[]): Promise<StudyGroupDetail> => {
     const response = await apiClient.post<StudyGroupDetail>(
-      `/study-groups/${id}/add_students/`,
+      `/study-groups/${groupId}/add_students/`,
       { student_ids: studentIds }
     );
     return response.data;
@@ -72,9 +70,9 @@ export const groupsApi = {
   /**
    * Удалить студентов из группы
    */
-  removeStudents: async (id: number, studentIds: number[]): Promise<StudyGroupDetail> => {
+  removeStudents: async (groupId: number, studentIds: number[]): Promise<StudyGroupDetail> => {
     const response = await apiClient.post<StudyGroupDetail>(
-      `/study-groups/${id}/remove_students/`,
+      `/study-groups/${groupId}/remove_students/`,
       { student_ids: studentIds }
     );
     return response.data;

@@ -1,9 +1,10 @@
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { useLogout } from '@/shared/hooks';
+import { NavLink, Link, Outlet, useNavigate } from 'react-router-dom';
+import { useLogout, useCurrentUser } from '@/shared/hooks';
 
 export function AdminShell() {
   const navigate = useNavigate();
   const logout = useLogout();
+  const { data: currentUser } = useCurrentUser();
 
   const handleLogout = () => {
     logout.mutate(undefined, {
@@ -103,13 +104,19 @@ export function AdminShell() {
 
         <div className="mt-auto p-6 border-t border-slate-200 dark:border-slate-800">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700" />
-            <div className="flex flex-col">
-              <p className="text-sm font-medium text-slate-900 dark:text-white">Admin User</p>
-              <p className="text-xs text-slate-500 dark:text-slate-400">admin@university.edu</p>
-            </div>
+            <Link
+              to="/admin/profile/edit"
+              className="flex flex-col min-w-0 flex-1 hover:text-primary transition-colors"
+            >
+              <p className="text-sm font-medium text-slate-900 dark:text-white truncate">
+                {currentUser?.full_name || `${currentUser?.first_name || ''} ${currentUser?.last_name || ''}`.trim() || currentUser?.username || 'Admin User'}
+              </p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
+                {currentUser?.email || 'admin@university.edu'}
+              </p>
+            </Link>
             <button 
-              className="ml-auto text-slate-400 hover:text-red-600 dark:hover:text-red-400 transition-colors" 
+              className="text-slate-400 hover:text-red-600 dark:hover:text-red-400 transition-colors" 
               type="button"
               onClick={handleLogout}
               title="Выход"

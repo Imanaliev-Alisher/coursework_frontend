@@ -16,7 +16,8 @@ export function LoginPage() {
 
     try {
       await login.mutateAsync({ username, password });
-      navigate('/');
+      // Принудительная перезагрузка страницы для полной очистки состояния
+      window.location.href = '/';
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Ошибка входа. Проверьте логин и пароль.');
     }
@@ -82,19 +83,6 @@ export function LoginPage() {
             </button>
           </div>
         </form>
-
-        <div className="mt-6 text-center text-sm text-gray-500">
-          <p>Тестовые учетные данные:</p>
-          <p className="mt-2">
-            <strong>Администратор:</strong> admin / admin123
-          </p>
-          <p>
-            <strong>Преподаватель:</strong> ivanov_i1 / teacher123
-          </p>
-          <p>
-            <strong>Студент:</strong> ivanov_a1_ивт21 / student123
-          </p>
-        </div>
       </div>
     </div>
   );

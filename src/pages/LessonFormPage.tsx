@@ -4,6 +4,7 @@ import {
   useSubject,
   useCreateSubject,
   useUpdateSubject,
+  useCreateSubjectSchedule,
   useGroups,
   useTeachers,
   useAudiences,
@@ -11,8 +12,14 @@ import {
   useDays,
   useTimeSlots,
 } from '@/shared/hooks';
-import type { SubjectCreateUpdateRequest } from '@/shared/api';
+import type { SubjectCreateRequest } from '@/features/schedule/types';
 import { useToast } from '@/shared/ui/Toast';
+
+// Extended form data type
+type SubjectFormData = SubjectCreateRequest & {
+  teachers?: number[];
+  groups?: number[];
+};
 
 export function LessonFormPage(props: { mode: 'create' | 'edit' }) {
   const params = useParams();
@@ -34,15 +41,15 @@ export function LessonFormPage(props: { mode: 'create' | 'edit' }) {
   // Мутации
   const createSubject = useCreateSubject();
   const updateSubject = useUpdateSubject();
+  const createSubjectSchedule = useCreateSubjectSchedule();
 
   // Состояние формы
-  const [formData, setFormData] = useState<SubjectCreateUpdateRequest>({
+  const [formData, setFormData] = useState<SubjectFormData>({
     title: '',
     subject_type: 0,
     audience: 0,
     teachers: [],
     groups: [],
-    schedule: [],
   });
 
   // Дополнительные поля для расписания
@@ -56,9 +63,9 @@ export function LessonFormPage(props: { mode: 'create' | 'edit' }) {
       setFormData({
         title: subject.title,
         subject_type: subject.subject_type,
-        audience: subject.audience,
         teachers: subject.teachers || [],
         groups: subject.groups || [],
+        audience: subject.audience,
       });
     }
   }, [subject, isEdit]);
@@ -71,13 +78,52 @@ export function LessonFormPage(props: { mode: 'create' | 'edit' }) {
         await updateSubject.mutateAsync({ id: subjectId, data: formData });
         showToast('Предмет успешно обновлён', 'success');
       } else {
-        await createSubject.mutateAsync(formData);
-        showToast('Предмет успешно создан', 'success');
+        // При создании нужно заполнить расписание
+        if (!scheduleDay || !scheduleTimeSlot) {
+          showToast('Укажите день недели и время занятия', 'error');
+          return;
+        }
+
+        // Проверка минимум 1 преподаватель и 1 группа
+        if (!formData.teachers || formData.teachers.length === 0) {
+          showToast('Выберите хотя бы одного преподавателя', 'error');
+          return;
+        }
+        if (!formData.groups || formData.groups.length === 0) {
+          showToast('Выберите хотя бы одну группу', 'error');
+          return;
+        }
+
+        // Создаём Subject
+        const createdSubject = await createSubject.mutateAsync(formData);
+        
+        console.log('Created subject:', createdSubject);
+        
+        if (!createdSubject?.id) {
+          showToast('Не удалось получить ID созданного предмета', 'error');
+          return;
+        }
+
+        // Создаём SubjectSchedule
+        const scheduleData = {
+          subject: createdSubject.id,
+          week_day: scheduleDay,
+          time_slot: scheduleTimeSlot,
+          week_type: scheduleWeekParity === 'odd' ? 'Нечетные' : scheduleWeekParity === 'even' ? 'Четные' : 'Все',
+          teacher_ids: formData.teachers || [],
+          group_ids: formData.groups || [],
+        };
+        
+        console.log('Creating schedule with data:', scheduleData);
+        
+        await createSubjectSchedule.mutateAsync(scheduleData as any);
+
+        showToast('Расписание успешно создано', 'success');
       }
       navigate('/admin/schedule');
     } catch (error) {
       console.error('Ошибка сохранения:', error);
-      showToast('Ошибка при сохранении предмета', 'error');
+      showToast('Ошибка при сохранении', 'error');
     }
   };
 
@@ -254,13 +300,14 @@ export function LessonFormPage(props: { mode: 'create' | 'edit' }) {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <label className="block">
                     <span className="text-slate-900 dark:text-white text-sm font-semibold mb-2 block">
-                      День недели
+                      День недели {!isEdit && '*'}
                     </span>
                     <div className="relative">
                       <select
                         className="form-select w-full rounded-lg border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white pl-4 pr-10 py-3 focus:border-primary focus:ring-primary appearance-none cursor-pointer"
                         value={scheduleDay}
                         onChange={(e) => setScheduleDay(Number(e.target.value))}
+                        required={!isEdit}
                       >
                         <option value={0}>Выберите день</option>
                         {daysData?.results.map((day) => (
@@ -277,13 +324,14 @@ export function LessonFormPage(props: { mode: 'create' | 'edit' }) {
 
                   <label className="block">
                     <span className="text-slate-900 dark:text-white text-sm font-semibold mb-2 block">
-                      Время занятия
+                      Время занятия {!isEdit && '*'}
                     </span>
                     <div className="relative">
                       <select
                         className="form-select w-full rounded-lg border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white pl-4 pr-10 py-3 focus:border-primary focus:ring-primary appearance-none cursor-pointer"
                         value={scheduleTimeSlot}
                         onChange={(e) => setScheduleTimeSlot(Number(e.target.value))}
+                        required={!isEdit}
                       >
                         <option value={0}>Выберите время</option>
                         {timeSlotsData?.results.map((slot) => (

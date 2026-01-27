@@ -1,0 +1,6429 @@
+openapi: 3.0.3
+info:
+  title: АИС "Расписание занятий" API
+  version: 1.0.0
+  description: REST API для автоматизированной информационной системы управления расписанием
+    учебных занятий
+paths:
+  /api/v1/audience-types/:
+    get:
+      operationId: v1_audience_types_list
+      description: Возвращает список всех типов аудиторий
+      summary: Получить список типов аудиторий
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - Типы аудиторий
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAudiencesTypesList'
+          description: ''
+    post:
+      operationId: v1_audience_types_create
+      description: Создает новый тип аудитории
+      summary: Создать тип аудитории
+      tags:
+      - Типы аудиторий
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AudiencesTypesRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AudiencesTypesRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AudiencesTypesRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AudiencesTypes'
+          description: ''
+  /api/v1/audience-types/{id}/:
+    get:
+      operationId: v1_audience_types_retrieve
+      description: Возвращает информацию о типе аудитории
+      summary: Получить тип аудитории
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Тип аудитории.
+        required: true
+      tags:
+      - Типы аудиторий
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AudiencesTypes'
+          description: ''
+    put:
+      operationId: v1_audience_types_update
+      description: Обновляет тип аудитории
+      summary: Обновить тип аудитории
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Тип аудитории.
+        required: true
+      tags:
+      - Типы аудиторий
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AudiencesTypesRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AudiencesTypesRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AudiencesTypesRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AudiencesTypes'
+          description: ''
+    patch:
+      operationId: v1_audience_types_partial_update
+      description: Частично обновляет тип аудитории
+      summary: Частично обновить тип аудитории
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Тип аудитории.
+        required: true
+      tags:
+      - Типы аудиторий
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAudiencesTypesRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAudiencesTypesRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAudiencesTypesRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AudiencesTypes'
+          description: ''
+    delete:
+      operationId: v1_audience_types_destroy
+      description: Удаляет тип аудитории из системы
+      summary: Удалить тип аудитории
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Тип аудитории.
+        required: true
+      tags:
+      - Типы аудиторий
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/audiences/:
+    get:
+      operationId: v1_audiences_list
+      description: Возвращает список всех аудиторий с возможностью фильтрации
+      summary: Получить список аудиторий
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - Аудитории
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAudiencesListList'
+          description: ''
+    post:
+      operationId: v1_audiences_create
+      description: Создает новую аудиторию в системе
+      summary: Создать аудиторию
+      tags:
+      - Аудитории
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AudiencesCreateUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AudiencesCreateUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AudiencesCreateUpdateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AudiencesCreateUpdate'
+          description: ''
+  /api/v1/audiences/{id}/:
+    get:
+      operationId: v1_audiences_retrieve
+      description: Возвращает детальную информацию об аудитории
+      summary: Получить аудиторию
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Аудитория.
+        required: true
+      tags:
+      - Аудитории
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AudiencesDetail'
+          description: ''
+    put:
+      operationId: v1_audiences_update
+      description: Обновляет всю информацию об аудитории
+      summary: Обновить аудиторию
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Аудитория.
+        required: true
+      tags:
+      - Аудитории
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AudiencesCreateUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AudiencesCreateUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AudiencesCreateUpdateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AudiencesCreateUpdate'
+          description: ''
+    patch:
+      operationId: v1_audiences_partial_update
+      description: Частично обновляет информацию об аудитории
+      summary: Частично обновить аудиторию
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Аудитория.
+        required: true
+      tags:
+      - Аудитории
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAudiencesCreateUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAudiencesCreateUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAudiencesCreateUpdateRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AudiencesCreateUpdate'
+          description: ''
+    delete:
+      operationId: v1_audiences_destroy
+      description: Удаляет аудиторию из системы
+      summary: Удалить аудиторию
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Аудитория.
+        required: true
+      tags:
+      - Аудитории
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/auth/token/:
+    post:
+      operationId: v1_auth_token_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPairRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPairRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPairRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenObtainPair'
+          description: ''
+  /api/v1/auth/token/refresh/:
+    post:
+      operationId: v1_auth_token_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+  /api/v1/auth/token/verify/:
+    post:
+      operationId: v1_auth_token_verify_create
+      description: |-
+        Takes a token and indicates if it is valid.  This view provides no
+        information about a token's fitness for a particular use.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenVerifyRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenVerifyRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenVerifyRequest'
+        required: true
+      responses:
+        '200':
+          description: No response body
+  /api/v1/buildings/:
+    get:
+      operationId: v1_buildings_list
+      description: Возвращает список всех зданий с краткой информацией
+      summary: Получить список зданий
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - Здания
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedBuildingsListList'
+          description: ''
+    post:
+      operationId: v1_buildings_create
+      description: Создает новое здание в системе
+      summary: Создать здание
+      tags:
+      - Здания
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BuildingsCreateUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BuildingsCreateUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BuildingsCreateUpdateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BuildingsCreateUpdate'
+          description: ''
+  /api/v1/buildings/{id}/:
+    get:
+      operationId: v1_buildings_retrieve
+      description: Возвращает детальную информацию о здании включая список аудиторий
+      summary: Получить здание
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Строение(Корпус).
+        required: true
+      tags:
+      - Здания
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BuildingsDetail'
+          description: ''
+    put:
+      operationId: v1_buildings_update
+      description: Обновляет всю информацию о здании
+      summary: Обновить здание
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Строение(Корпус).
+        required: true
+      tags:
+      - Здания
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BuildingsCreateUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BuildingsCreateUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BuildingsCreateUpdateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BuildingsCreateUpdate'
+          description: ''
+    patch:
+      operationId: v1_buildings_partial_update
+      description: Частично обновляет информацию о здании
+      summary: Частично обновить здание
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Строение(Корпус).
+        required: true
+      tags:
+      - Здания
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedBuildingsCreateUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedBuildingsCreateUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedBuildingsCreateUpdateRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BuildingsCreateUpdate'
+          description: ''
+    delete:
+      operationId: v1_buildings_destroy
+      description: Удаляет здание из системы
+      summary: Удалить здание
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Строение(Корпус).
+        required: true
+      tags:
+      - Здания
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/buildings/{id}/audiences/:
+    get:
+      operationId: v1_buildings_audiences_list
+      description: Возвращает список всех аудиторий конкретного здания
+      summary: Получить аудитории здания
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Строение(Корпус).
+        required: true
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - Здания
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAudiencesListList'
+          description: ''
+  /api/v1/buildings/{id}/statistics/:
+    get:
+      operationId: v1_buildings_statistics_retrieve
+      description: 'Возвращает статистику: количество аудиторий, распределение по
+        этажам и типам'
+      summary: Статистика по зданию
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Строение(Корпус).
+        required: true
+      tags:
+      - Здания
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BuildingsDetail'
+          description: ''
+  /api/v1/days/:
+    get:
+      operationId: v1_days_list
+      description: Возвращает список всех дней недели
+      summary: Получить список дней недели
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - Дни недели
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDayList'
+          description: ''
+    post:
+      operationId: v1_days_create
+      description: Создает новый день недели
+      summary: Создать день недели
+      tags:
+      - Дни недели
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DayRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DayRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DayRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Day'
+          description: ''
+  /api/v1/days/{id}/:
+    get:
+      operationId: v1_days_retrieve
+      description: Возвращает информацию о дне недели
+      summary: Получить день недели
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this День недели.
+        required: true
+      tags:
+      - Дни недели
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Day'
+          description: ''
+    put:
+      operationId: v1_days_update
+      description: Обновляет день недели
+      summary: Обновить день недели
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this День недели.
+        required: true
+      tags:
+      - Дни недели
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DayRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DayRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DayRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Day'
+          description: ''
+    patch:
+      operationId: v1_days_partial_update
+      description: Частично обновляет день недели
+      summary: Частично обновить день недели
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this День недели.
+        required: true
+      tags:
+      - Дни недели
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedDayRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedDayRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedDayRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Day'
+          description: ''
+    delete:
+      operationId: v1_days_destroy
+      description: Удаляет день недели
+      summary: Удалить день недели
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this День недели.
+        required: true
+      tags:
+      - Дни недели
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/schedule-generator/generate/:
+    post:
+      operationId: v1_schedule_generator_generate_create
+      description: |-
+        Автоматически генерирует расписание для указанных групп.
+
+        **Алгоритм учитывает:**
+        - У одной группы не может быть более одного предмета в одно время
+        - В одной аудитории не может быть более одного предмета (кроме потоковых)
+        - Преподаватель не может вести несколько предметов одновременно
+        - Поддержка потоковых предметов (один предмет для нескольких групп)
+
+        **Временные промежутки:**
+        - `morning`: Утренние пары (08:00-14:30)
+        - `mixed`: Смешанные пары (11:30-17:00)
+        - `afternoon`: Послеобеденные пары (13:00-18:20)
+        - `evening`: Вечерние пары (16:00-21:00)
+        - `full`: Весь день (08:00-21:00)
+        - Или укажите `custom_start_time` и `custom_end_time` в формате HH:MM
+      summary: Сгенерировать расписание
+      tags:
+      - Генерация расписания
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScheduleGenerationRequestRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ScheduleGenerationRequestRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ScheduleGenerationRequestRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScheduleGenerationResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScheduleGenerationResponse'
+          description: ''
+  /api/v1/schedule-generator/statistics/:
+    get:
+      operationId: v1_schedule_generator_statistics_retrieve
+      description: Возвращает статистику по расписанию указанных групп
+      summary: Статистика расписания
+      parameters:
+      - in: query
+        name: group_ids
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Список ID групп (через запятую)
+        required: true
+        explode: false
+        style: form
+      tags:
+      - Генерация расписания
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScheduleStatistics'
+          description: ''
+  /api/v1/schedule-generator/time_ranges/:
+    get:
+      operationId: v1_schedule_generator_time_ranges_retrieve
+      description: Возвращает список предустановленных временных промежутков для генерации
+        расписания
+      summary: Получить доступные временные промежутки
+      tags:
+      - Генерация расписания
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvailableTimeRanges'
+          description: ''
+  /api/v1/schedule-generator/validate/:
+    get:
+      operationId: v1_schedule_generator_validate_retrieve
+      description: |-
+        Проверяет расписание групп на наличие конфликтов:
+        - Конфликты групп (два предмета одновременно)
+        - Конфликты аудиторий (занята несколькими предметами)
+        - Конфликты преподавателей (ведет несколько предметов одновременно)
+      summary: Валидировать расписание
+      parameters:
+      - in: query
+        name: group_ids
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Список ID групп для проверки (через запятую)
+        required: true
+        explode: false
+        style: form
+      tags:
+      - Генерация расписания
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScheduleValidationResponse'
+          description: ''
+  /api/v1/students/:
+    get:
+      operationId: v1_students_list
+      description: Возвращает список всех студентов
+      summary: Получить список студентов
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - Студенты
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedStudentList'
+          description: ''
+  /api/v1/students/{id}/:
+    get:
+      operationId: v1_students_retrieve
+      description: Возвращает информацию о конкретном студенте
+      summary: Получить студента
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this пользователь.
+        required: true
+      tags:
+      - Студенты
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Student'
+          description: ''
+  /api/v1/students/{id}/study_groups/:
+    get:
+      operationId: v1_students_study_groups_retrieve
+      description: Возвращает список учебных групп, в которых состоит студент
+      summary: Получить группы студента
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this пользователь.
+        required: true
+      tags:
+      - Студенты
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Student'
+          description: ''
+  /api/v1/study-groups/:
+    get:
+      operationId: v1_study_groups_list
+      description: Возвращает список всех учебных групп с возможностью фильтрации
+      summary: Получить список учебных групп
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - Учебные группы
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedStudyGroupsListList'
+          description: ''
+    post:
+      operationId: v1_study_groups_create
+      description: Создает новую учебную группу
+      summary: Создать учебную группу
+      tags:
+      - Учебные группы
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudyGroupsCreateUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/StudyGroupsCreateUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/StudyGroupsCreateUpdateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudyGroupsCreateUpdate'
+          description: ''
+  /api/v1/study-groups/{id}/:
+    get:
+      operationId: v1_study_groups_retrieve
+      description: Возвращает детальную информацию об учебной группе со списком студентов
+      summary: Получить учебную группу
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Учебная группа.
+        required: true
+      tags:
+      - Учебные группы
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudyGroupsDetail'
+          description: ''
+    put:
+      operationId: v1_study_groups_update
+      description: Обновляет всю информацию об учебной группе
+      summary: Обновить учебную группу
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Учебная группа.
+        required: true
+      tags:
+      - Учебные группы
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudyGroupsCreateUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/StudyGroupsCreateUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/StudyGroupsCreateUpdateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudyGroupsCreateUpdate'
+          description: ''
+    patch:
+      operationId: v1_study_groups_partial_update
+      description: Частично обновляет информацию об учебной группе
+      summary: Частично обновить учебную группу
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Учебная группа.
+        required: true
+      tags:
+      - Учебные группы
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedStudyGroupsCreateUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedStudyGroupsCreateUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedStudyGroupsCreateUpdateRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudyGroupsCreateUpdate'
+          description: ''
+    delete:
+      operationId: v1_study_groups_destroy
+      description: Удаляет учебную группу из системы
+      summary: Удалить учебную группу
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Учебная группа.
+        required: true
+      tags:
+      - Учебные группы
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/study-groups/{id}/add_students/:
+    post:
+      operationId: v1_study_groups_add_students_create
+      description: Добавляет одного или нескольких студентов в учебную группу
+      summary: Добавить студентов в группу
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Учебная группа.
+        required: true
+      tags:
+      - Учебные группы
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddStudentsRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AddStudentsRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AddStudentsRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddStudents'
+          description: ''
+  /api/v1/study-groups/{id}/remove_students/:
+    post:
+      operationId: v1_study_groups_remove_students_create
+      description: Удаляет одного или нескольких студентов из учебной группы
+      summary: Удалить студентов из группы
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Учебная группа.
+        required: true
+      tags:
+      - Учебные группы
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RemoveStudentsRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RemoveStudentsRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RemoveStudentsRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RemoveStudents'
+          description: ''
+  /api/v1/study-groups/{id}/statistics/:
+    get:
+      operationId: v1_study_groups_statistics_retrieve
+      description: 'Возвращает статистику: количество студентов, активность группы'
+      summary: Статистика по группе
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Учебная группа.
+        required: true
+      tags:
+      - Учебные группы
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudyGroupsDetail'
+          description: ''
+  /api/v1/study-groups/{id}/students/:
+    get:
+      operationId: v1_study_groups_students_retrieve
+      description: Возвращает список всех студентов учебной группы
+      summary: Получить список студентов группы
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Учебная группа.
+        required: true
+      tags:
+      - Учебные группы
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudyGroupsDetail'
+          description: ''
+  /api/v1/study-groups/{id}/toggle_active/:
+    post:
+      operationId: v1_study_groups_toggle_active_create
+      description: Изменяет статус активности учебной группы
+      summary: Активировать/деактивировать группу
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Учебная группа.
+        required: true
+      tags:
+      - Учебные группы
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudyGroupsDetailRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/StudyGroupsDetailRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/StudyGroupsDetailRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudyGroupsDetail'
+          description: ''
+  /api/v1/subject-schedules/:
+    get:
+      operationId: v1_subject_schedules_list
+      description: "Возвращает список всех временных слотов расписания с полной информацией:\n\
+        \        - День недели и время занятия\n        - Информация о предмете (название,\
+        \ тип)\n        - Детали аудитории (номер, этаж, корпус)\n        - Список\
+        \ групп (ID и названия)\n        - Список преподавателей (ID, имя пользователя,\
+        \ ФИО)\n        - Тип недели (Четные/Нечетные/Все)\n        \n        Поддерживает\
+        \ фильтрацию по:\n        - subject: ID предмета\n        - day: ID дня недели\n\
+        \        - time_slot: ID временного слота\n        - week_type: тип недели\
+        \ (Четные/Нечетные/Все)\n        - group: ID группы (для получения расписания\
+        \ конкретной группы)\n        - teacher: ID преподавателя (для получения расписания\
+        \ преподавателя)\n        "
+      summary: Получить список расписаний
+      parameters:
+      - in: query
+        name: day
+        schema:
+          type: integer
+        description: Фильтр по ID дня недели
+      - in: query
+        name: group
+        schema:
+          type: integer
+        description: Фильтр по ID группы
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: subject
+        schema:
+          type: integer
+        description: Фильтр по ID предмета
+      - in: query
+        name: teacher
+        schema:
+          type: integer
+        description: Фильтр по ID преподавателя
+      - in: query
+        name: time_slot
+        schema:
+          type: integer
+        description: Фильтр по ID временного слота
+      - in: query
+        name: week_type
+        schema:
+          type: string
+        description: Фильтр по типу недели (Четные/Нечетные/Все)
+      tags:
+      - Расписание
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSubjectScheduleListList'
+          description: ''
+    post:
+      operationId: v1_subject_schedules_create
+      description: Создает новое расписание для предмета с привязкой к дню, времени,
+        группам и преподавателям
+      summary: Создать расписание
+      tags:
+      - Расписание
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubjectScheduleCreateUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SubjectScheduleCreateUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SubjectScheduleCreateUpdateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubjectScheduleCreateUpdate'
+          description: ''
+  /api/v1/subject-schedules/{id}/:
+    get:
+      operationId: v1_subject_schedules_retrieve
+      description: "Возвращает детальную информацию о конкретном расписании, включая:\n\
+        \        - Полную информацию о дне недели и временном слоте\n        - Детали\
+        \ о группах (ID, название, активность, количество студентов)\n        - Детали\
+        \ о преподавателях (ID, username, ФИО, email)\n        - Тип недели\n    \
+        \    "
+      summary: Получить расписание
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Расписание предмета.
+        required: true
+      tags:
+      - Расписание
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubjectScheduleDetail'
+          description: ''
+    put:
+      operationId: v1_subject_schedules_update
+      description: Обновляет расписание
+      summary: Обновить расписание
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Расписание предмета.
+        required: true
+      tags:
+      - Расписание
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubjectScheduleCreateUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SubjectScheduleCreateUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SubjectScheduleCreateUpdateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubjectScheduleCreateUpdate'
+          description: ''
+    patch:
+      operationId: v1_subject_schedules_partial_update
+      description: Частично обновляет расписание
+      summary: Частично обновить расписание
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Расписание предмета.
+        required: true
+      tags:
+      - Расписание
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSubjectScheduleCreateUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedSubjectScheduleCreateUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedSubjectScheduleCreateUpdateRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubjectScheduleCreateUpdate'
+          description: ''
+    delete:
+      operationId: v1_subject_schedules_destroy
+      description: Удаляет расписание
+      summary: Удалить расписание
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Расписание предмета.
+        required: true
+      tags:
+      - Расписание
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/subject-types/:
+    get:
+      operationId: v1_subject_types_list
+      description: Возвращает список всех типов предметов
+      summary: Получить список типов предметов
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - Типы предметов
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSubjectsTypesList'
+          description: ''
+    post:
+      operationId: v1_subject_types_create
+      description: Создает новый тип предмета
+      summary: Создать тип предмета
+      tags:
+      - Типы предметов
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubjectsTypesRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SubjectsTypesRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SubjectsTypesRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubjectsTypes'
+          description: ''
+  /api/v1/subject-types/{id}/:
+    get:
+      operationId: v1_subject_types_retrieve
+      description: Возвращает информацию о типе предмета
+      summary: Получить тип предмета
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Тип предмета.
+        required: true
+      tags:
+      - Типы предметов
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubjectsTypes'
+          description: ''
+    put:
+      operationId: v1_subject_types_update
+      description: Обновляет тип предмета
+      summary: Обновить тип предмета
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Тип предмета.
+        required: true
+      tags:
+      - Типы предметов
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubjectsTypesRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SubjectsTypesRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SubjectsTypesRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubjectsTypes'
+          description: ''
+    patch:
+      operationId: v1_subject_types_partial_update
+      description: Частично обновляет тип предмета
+      summary: Частично обновить тип предмета
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Тип предмета.
+        required: true
+      tags:
+      - Типы предметов
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSubjectsTypesRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedSubjectsTypesRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedSubjectsTypesRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubjectsTypes'
+          description: ''
+    delete:
+      operationId: v1_subject_types_destroy
+      description: Удаляет тип предмета
+      summary: Удалить тип предмета
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Тип предмета.
+        required: true
+      tags:
+      - Типы предметов
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/subjects/:
+    get:
+      operationId: v1_subjects_list
+      description: Возвращает список всех предметов с возможностью фильтрации
+      summary: Получить список предметов
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - Предметы
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSubjectsListList'
+          description: ''
+    post:
+      operationId: v1_subjects_create
+      description: Создает новый предмет
+      summary: Создать предмет
+      tags:
+      - Предметы
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubjectsCreateUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SubjectsCreateUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SubjectsCreateUpdateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubjectsCreateUpdate'
+          description: ''
+  /api/v1/subjects/{id}/:
+    get:
+      operationId: v1_subjects_retrieve
+      description: Возвращает детальную информацию о предмете
+      summary: Получить предмет
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Предмет.
+        required: true
+      tags:
+      - Предметы
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubjectsDetail'
+          description: ''
+    put:
+      operationId: v1_subjects_update
+      description: Обновляет предмет
+      summary: Обновить предмет
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Предмет.
+        required: true
+      tags:
+      - Предметы
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubjectsCreateUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SubjectsCreateUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SubjectsCreateUpdateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubjectsCreateUpdate'
+          description: ''
+    patch:
+      operationId: v1_subjects_partial_update
+      description: Частично обновляет предмет
+      summary: Частично обновить предмет
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Предмет.
+        required: true
+      tags:
+      - Предметы
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSubjectsCreateUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedSubjectsCreateUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedSubjectsCreateUpdateRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubjectsCreateUpdate'
+          description: ''
+    delete:
+      operationId: v1_subjects_destroy
+      description: Удаляет предмет
+      summary: Удалить предмет
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Предмет.
+        required: true
+      tags:
+      - Предметы
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/subjects/audience_timetable/:
+    get:
+      operationId: v1_subjects_audience_timetable_retrieve
+      description: Возвращает расписание занятий для конкретной аудитории
+      summary: Получить расписание аудитории
+      parameters:
+      - in: query
+        name: audience_id
+        schema:
+          type: integer
+        description: ID аудитории
+        required: true
+      tags:
+      - Предметы
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubjectsDetail'
+          description: ''
+  /api/v1/subjects/export_group_excel/:
+    get:
+      operationId: v1_subjects_export_group_excel_retrieve
+      description: Экспортирует расписание учебной группы в формате Excel
+      summary: Экспорт расписания группы в Excel
+      parameters:
+      - in: query
+        name: group_id
+        schema:
+          type: integer
+        description: ID группы
+        required: true
+      tags:
+      - Предметы
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubjectsDetail'
+          description: ''
+  /api/v1/subjects/export_group_pdf/:
+    get:
+      operationId: v1_subjects_export_group_pdf_retrieve
+      description: Экспортирует расписание учебной группы в формате PDF
+      summary: Экспорт расписания группы в PDF
+      parameters:
+      - in: query
+        name: group_id
+        schema:
+          type: integer
+        description: ID группы
+        required: true
+      tags:
+      - Предметы
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubjectsDetail'
+          description: ''
+  /api/v1/subjects/export_teacher_excel/:
+    get:
+      operationId: v1_subjects_export_teacher_excel_retrieve
+      description: Экспортирует расписание преподавателя в формате Excel
+      summary: Экспорт расписания преподавателя в Excel
+      parameters:
+      - in: query
+        name: teacher_id
+        schema:
+          type: integer
+        description: ID преподавателя
+        required: true
+      tags:
+      - Предметы
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubjectsDetail'
+          description: ''
+  /api/v1/subjects/export_teacher_pdf/:
+    get:
+      operationId: v1_subjects_export_teacher_pdf_retrieve
+      description: Экспортирует расписание преподавателя в формате PDF
+      summary: Экспорт расписания преподавателя в PDF
+      parameters:
+      - in: query
+        name: teacher_id
+        schema:
+          type: integer
+        description: ID преподавателя
+        required: true
+      tags:
+      - Предметы
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubjectsDetail'
+          description: ''
+  /api/v1/subjects/group_timetable/:
+    get:
+      operationId: v1_subjects_group_timetable_retrieve
+      description: Возвращает расписание занятий для конкретной группы
+      summary: Получить расписание группы
+      parameters:
+      - in: query
+        name: group_id
+        schema:
+          type: integer
+        description: ID группы
+        required: true
+      tags:
+      - Предметы
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubjectsDetail'
+          description: ''
+  /api/v1/subjects/teacher_timetable/:
+    get:
+      operationId: v1_subjects_teacher_timetable_retrieve
+      description: Возвращает расписание занятий для конкретного преподавателя
+      summary: Получить расписание преподавателя
+      parameters:
+      - in: query
+        name: teacher_id
+        schema:
+          type: integer
+        description: ID преподавателя
+        required: true
+      tags:
+      - Предметы
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubjectsDetail'
+          description: ''
+  /api/v1/teachers/:
+    get:
+      operationId: v1_teachers_list
+      description: Возвращает список всех преподавателей
+      summary: Получить список преподавателей
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - Преподаватели
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTeacherList'
+          description: ''
+  /api/v1/teachers/{id}/:
+    get:
+      operationId: v1_teachers_retrieve
+      description: Возвращает информацию о конкретном преподавателе
+      summary: Получить преподавателя
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this пользователь.
+        required: true
+      tags:
+      - Преподаватели
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Teacher'
+          description: ''
+  /api/v1/time-slots/:
+    get:
+      operationId: v1_time_slots_list
+      description: Возвращает список всех временных слотов (пар)
+      summary: Получить список временных слотов
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - Временные слоты
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTimeSlotList'
+          description: ''
+    post:
+      operationId: v1_time_slots_create
+      description: Создает новый временной слот (пару)
+      summary: Создать временной слот
+      tags:
+      - Временные слоты
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TimeSlotRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TimeSlotRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TimeSlotRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeSlot'
+          description: ''
+  /api/v1/time-slots/{id}/:
+    get:
+      operationId: v1_time_slots_retrieve
+      description: Возвращает информацию о временном слоте
+      summary: Получить временной слот
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Временной слот (пара).
+        required: true
+      tags:
+      - Временные слоты
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeSlot'
+          description: ''
+    put:
+      operationId: v1_time_slots_update
+      description: Обновляет временной слот
+      summary: Обновить временной слот
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Временной слот (пара).
+        required: true
+      tags:
+      - Временные слоты
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TimeSlotRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TimeSlotRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TimeSlotRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeSlot'
+          description: ''
+    patch:
+      operationId: v1_time_slots_partial_update
+      description: Частично обновляет временной слот
+      summary: Частично обновить временной слот
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Временной слот (пара).
+        required: true
+      tags:
+      - Временные слоты
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedTimeSlotRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedTimeSlotRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedTimeSlotRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeSlot'
+          description: ''
+    delete:
+      operationId: v1_time_slots_destroy
+      description: Удаляет временной слот
+      summary: Удалить временной слот
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Временной слот (пара).
+        required: true
+      tags:
+      - Временные слоты
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/users/:
+    get:
+      operationId: v1_users_list
+      description: Возвращает список всех пользователей системы
+      summary: Получить список пользователей
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - Пользователи
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUserList'
+          description: ''
+    post:
+      operationId: v1_users_create
+      description: Создает нового пользователя в системе
+      summary: Создать пользователя
+      tags:
+      - Пользователи
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserCreateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserCreateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCreate'
+          description: ''
+  /api/v1/users/{id}/:
+    get:
+      operationId: v1_users_retrieve
+      description: Возвращает информацию о конкретном пользователе
+      summary: Получить пользователя
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this пользователь.
+        required: true
+      tags:
+      - Пользователи
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    put:
+      operationId: v1_users_update
+      description: Обновляет информацию о пользователе
+      summary: Обновить пользователя
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this пользователь.
+        required: true
+      tags:
+      - Пользователи
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserUpdate'
+          description: ''
+    patch:
+      operationId: v1_users_partial_update
+      description: Частично обновляет информацию о пользователе
+      summary: Частично обновить пользователя
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this пользователь.
+        required: true
+      tags:
+      - Пользователи
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserUpdateRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserUpdate'
+          description: ''
+    delete:
+      operationId: v1_users_destroy
+      description: Удаляет пользователя из системы
+      summary: Удалить пользователя
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this пользователь.
+        required: true
+      tags:
+      - Пользователи
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/users/change_password/:
+    post:
+      operationId: v1_users_change_password_create
+      description: Позволяет пользователю изменить свой пароль
+      summary: Изменить пароль
+      tags:
+      - Пользователи
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /api/v1/users/me/:
+    get:
+      operationId: v1_users_me_retrieve
+      description: Возвращает информацию о текущем авторизованном пользователе
+      summary: Получить текущего пользователя
+      tags:
+      - Пользователи
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+components:
+  schemas:
+    AddStudents:
+      type: object
+      description: Сериализатор для добавления студентов в группу
+      properties:
+        student_ids:
+          type: array
+          items:
+            type: integer
+      required:
+      - student_ids
+    AddStudentsRequest:
+      type: object
+      description: Сериализатор для добавления студентов в группу
+      properties:
+        student_ids:
+          type: array
+          items:
+            type: integer
+      required:
+      - student_ids
+    AudiencesCreateUpdate:
+      type: object
+      description: Сериализатор для создания/обновления аудитории
+      properties:
+        auditorium_number:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          title: Номер аудитории
+          description: Введите номер аудитории
+        auditorium_type:
+          type: integer
+          title: Тип аудитории
+          description: Выберите тип аудитории
+        floor_number:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          title: Этаж
+          description: Введите этаж на котором находиться аудитория
+        building:
+          type: integer
+          title: Строение(Корпус)
+          description: Выберите строение(корпус) в котором находится аудитория
+        title:
+          type: string
+          title: Введите название аудитории
+          description: Название (если не указано — сформируется автоматически)
+          maxLength: 63
+      required:
+      - auditorium_number
+      - auditorium_type
+      - building
+      - floor_number
+    AudiencesCreateUpdateRequest:
+      type: object
+      description: Сериализатор для создания/обновления аудитории
+      properties:
+        auditorium_number:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          title: Номер аудитории
+          description: Введите номер аудитории
+        auditorium_type:
+          type: integer
+          title: Тип аудитории
+          description: Выберите тип аудитории
+        floor_number:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          title: Этаж
+          description: Введите этаж на котором находиться аудитория
+        building:
+          type: integer
+          title: Строение(Корпус)
+          description: Выберите строение(корпус) в котором находится аудитория
+        title:
+          type: string
+          title: Введите название аудитории
+          description: Название (если не указано — сформируется автоматически)
+          maxLength: 63
+      required:
+      - auditorium_number
+      - auditorium_type
+      - building
+      - floor_number
+    AudiencesDetail:
+      type: object
+      description: Сериализатор для детальной информации об аудитории
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          readOnly: true
+          title: Введите название аудитории
+          description: Название (если не указано — сформируется автоматически)
+        auditorium_number:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          title: Номер аудитории
+          description: Введите номер аудитории
+        auditorium_type:
+          type: integer
+          title: Тип аудитории
+          description: Выберите тип аудитории
+        auditorium_type_details:
+          allOf:
+          - $ref: '#/components/schemas/AudiencesTypes'
+          readOnly: true
+        floor_number:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          title: Этаж
+          description: Введите этаж на котором находиться аудитория
+        building:
+          type: integer
+          title: Строение(Корпус)
+          description: Выберите строение(корпус) в котором находится аудитория
+        building_name:
+          type: string
+          readOnly: true
+        building_address:
+          type: string
+          readOnly: true
+      required:
+      - auditorium_number
+      - auditorium_type
+      - auditorium_type_details
+      - building
+      - building_address
+      - building_name
+      - floor_number
+      - id
+      - title
+    AudiencesList:
+      type: object
+      description: Сериализатор для списка аудиторий (краткая информация)
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          readOnly: true
+          title: Введите название аудитории
+          description: Название (если не указано — сформируется автоматически)
+        auditorium_number:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          title: Номер аудитории
+          description: Введите номер аудитории
+        auditorium_type:
+          type: integer
+          title: Тип аудитории
+          description: Выберите тип аудитории
+        auditorium_type_name:
+          type: string
+          readOnly: true
+        floor_number:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          title: Этаж
+          description: Введите этаж на котором находиться аудитория
+        building:
+          type: integer
+          title: Строение(Корпус)
+          description: Выберите строение(корпус) в котором находится аудитория
+        building_name:
+          type: string
+          readOnly: true
+      required:
+      - auditorium_number
+      - auditorium_type
+      - auditorium_type_name
+      - building
+      - building_name
+      - floor_number
+      - id
+      - title
+    AudiencesTypes:
+      type: object
+      description: Сериализатор для типов аудиторий
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          title: Название
+          description: Введите название типа
+          maxLength: 63
+      required:
+      - id
+      - title
+    AudiencesTypesRequest:
+      type: object
+      description: Сериализатор для типов аудиторий
+      properties:
+        title:
+          type: string
+          minLength: 1
+          title: Название
+          description: Введите название типа
+          maxLength: 63
+      required:
+      - title
+    AvailableTimeRanges:
+      type: object
+      description: Сериализатор для списка доступных временных промежутков
+      properties:
+        morning:
+          $ref: '#/components/schemas/TimeRange'
+        mixed:
+          $ref: '#/components/schemas/TimeRange'
+        afternoon:
+          $ref: '#/components/schemas/TimeRange'
+        evening:
+          $ref: '#/components/schemas/TimeRange'
+        full:
+          $ref: '#/components/schemas/TimeRange'
+      required:
+      - afternoon
+      - evening
+      - full
+      - mixed
+      - morning
+    BuildingsCreateUpdate:
+      type: object
+      description: Сериализатор для создания/обновления здания
+      properties:
+        title:
+          type: string
+          title: Строение(Корпус)
+          description: Введите наименование строения(корпуса)
+          maxLength: 255
+        country:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          title: Страна
+          description: |-
+            Введите страну где находится строение(корпус)
+
+            * `AF` - Afghanistan
+            * `AX` - Åland Islands
+            * `AL` - Albania
+            * `DZ` - Algeria
+            * `AS` - American Samoa
+            * `AD` - Andorra
+            * `AO` - Angola
+            * `AI` - Anguilla
+            * `AQ` - Antarctica
+            * `AG` - Antigua and Barbuda
+            * `AR` - Argentina
+            * `AM` - Armenia
+            * `AW` - Aruba
+            * `AU` - Australia
+            * `AT` - Austria
+            * `AZ` - Azerbaijan
+            * `BS` - Bahamas
+            * `BH` - Bahrain
+            * `BD` - Bangladesh
+            * `BB` - Barbados
+            * `BY` - Belarus
+            * `BE` - Belgium
+            * `BZ` - Belize
+            * `BJ` - Benin
+            * `BM` - Bermuda
+            * `BT` - Bhutan
+            * `BO` - Bolivia
+            * `BQ` - Bonaire, Sint Eustatius and Saba
+            * `BA` - Bosnia and Herzegovina
+            * `BW` - Botswana
+            * `BV` - Bouvet Island
+            * `BR` - Brazil
+            * `IO` - British Indian Ocean Territory
+            * `BN` - Brunei
+            * `BG` - Bulgaria
+            * `BF` - Burkina Faso
+            * `BI` - Burundi
+            * `CV` - Cabo Verde
+            * `KH` - Cambodia
+            * `CM` - Cameroon
+            * `CA` - Canada
+            * `KY` - Cayman Islands
+            * `CF` - Central African Republic
+            * `TD` - Chad
+            * `CL` - Chile
+            * `CN` - China
+            * `CX` - Christmas Island
+            * `CC` - Cocos (Keeling) Islands
+            * `CO` - Colombia
+            * `KM` - Comoros
+            * `CG` - Congo
+            * `CD` - Congo (the Democratic Republic of the)
+            * `CK` - Cook Islands
+            * `CR` - Costa Rica
+            * `CI` - Côte d'Ivoire
+            * `HR` - Croatia
+            * `CU` - Cuba
+            * `CW` - Curaçao
+            * `CY` - Cyprus
+            * `CZ` - Czechia
+            * `DK` - Denmark
+            * `DJ` - Djibouti
+            * `DM` - Dominica
+            * `DO` - Dominican Republic
+            * `EC` - Ecuador
+            * `EG` - Egypt
+            * `SV` - El Salvador
+            * `GQ` - Equatorial Guinea
+            * `ER` - Eritrea
+            * `EE` - Estonia
+            * `SZ` - Eswatini
+            * `ET` - Ethiopia
+            * `FK` - Falkland Islands (Malvinas)
+            * `FO` - Faroe Islands
+            * `FJ` - Fiji
+            * `FI` - Finland
+            * `FR` - France
+            * `GF` - French Guiana
+            * `PF` - French Polynesia
+            * `TF` - French Southern Territories
+            * `GA` - Gabon
+            * `GM` - Gambia
+            * `GE` - Georgia
+            * `DE` - Germany
+            * `GH` - Ghana
+            * `GI` - Gibraltar
+            * `GR` - Greece
+            * `GL` - Greenland
+            * `GD` - Grenada
+            * `GP` - Guadeloupe
+            * `GU` - Guam
+            * `GT` - Guatemala
+            * `GG` - Guernsey
+            * `GN` - Guinea
+            * `GW` - Guinea-Bissau
+            * `GY` - Guyana
+            * `HT` - Haiti
+            * `HM` - Heard Island and McDonald Islands
+            * `VA` - Holy See
+            * `HN` - Honduras
+            * `HK` - Hong Kong
+            * `HU` - Hungary
+            * `IS` - Iceland
+            * `IN` - India
+            * `ID` - Indonesia
+            * `IR` - Iran
+            * `IQ` - Iraq
+            * `IE` - Ireland
+            * `IM` - Isle of Man
+            * `IL` - Israel
+            * `IT` - Italy
+            * `JM` - Jamaica
+            * `JP` - Japan
+            * `JE` - Jersey
+            * `JO` - Jordan
+            * `KZ` - Kazakhstan
+            * `KE` - Kenya
+            * `KI` - Kiribati
+            * `KW` - Kuwait
+            * `KG` - Kyrgyzstan
+            * `LA` - Laos
+            * `LV` - Latvia
+            * `LB` - Lebanon
+            * `LS` - Lesotho
+            * `LR` - Liberia
+            * `LY` - Libya
+            * `LI` - Liechtenstein
+            * `LT` - Lithuania
+            * `LU` - Luxembourg
+            * `MO` - Macao
+            * `MG` - Madagascar
+            * `MW` - Malawi
+            * `MY` - Malaysia
+            * `MV` - Maldives
+            * `ML` - Mali
+            * `MT` - Malta
+            * `MH` - Marshall Islands
+            * `MQ` - Martinique
+            * `MR` - Mauritania
+            * `MU` - Mauritius
+            * `YT` - Mayotte
+            * `MX` - Mexico
+            * `FM` - Micronesia
+            * `MD` - Moldova
+            * `MC` - Monaco
+            * `MN` - Mongolia
+            * `ME` - Montenegro
+            * `MS` - Montserrat
+            * `MA` - Morocco
+            * `MZ` - Mozambique
+            * `MM` - Myanmar
+            * `NA` - Namibia
+            * `NR` - Nauru
+            * `NP` - Nepal
+            * `NL` - Netherlands
+            * `NC` - New Caledonia
+            * `NZ` - New Zealand
+            * `NI` - Nicaragua
+            * `NE` - Niger
+            * `NG` - Nigeria
+            * `NU` - Niue
+            * `NF` - Norfolk Island
+            * `KP` - North Korea
+            * `MK` - North Macedonia
+            * `MP` - Northern Mariana Islands
+            * `NO` - Norway
+            * `OM` - Oman
+            * `PK` - Pakistan
+            * `PW` - Palau
+            * `PS` - Palestine, State of
+            * `PA` - Panama
+            * `PG` - Papua New Guinea
+            * `PY` - Paraguay
+            * `PE` - Peru
+            * `PH` - Philippines
+            * `PN` - Pitcairn
+            * `PL` - Poland
+            * `PT` - Portugal
+            * `PR` - Puerto Rico
+            * `QA` - Qatar
+            * `RE` - Réunion
+            * `RO` - Romania
+            * `RU` - Russia
+            * `RW` - Rwanda
+            * `BL` - Saint Barthélemy
+            * `SH` - Saint Helena, Ascension and Tristan da Cunha
+            * `KN` - Saint Kitts and Nevis
+            * `LC` - Saint Lucia
+            * `MF` - Saint Martin (French part)
+            * `PM` - Saint Pierre and Miquelon
+            * `VC` - Saint Vincent and the Grenadines
+            * `WS` - Samoa
+            * `SM` - San Marino
+            * `ST` - Sao Tome and Principe
+            * `SA` - Saudi Arabia
+            * `SN` - Senegal
+            * `RS` - Serbia
+            * `SC` - Seychelles
+            * `SL` - Sierra Leone
+            * `SG` - Singapore
+            * `SX` - Sint Maarten (Dutch part)
+            * `SK` - Slovakia
+            * `SI` - Slovenia
+            * `SB` - Solomon Islands
+            * `SO` - Somalia
+            * `ZA` - South Africa
+            * `GS` - South Georgia and the South Sandwich Islands
+            * `KR` - South Korea
+            * `SS` - South Sudan
+            * `ES` - Spain
+            * `LK` - Sri Lanka
+            * `SD` - Sudan
+            * `SR` - Suriname
+            * `SJ` - Svalbard and Jan Mayen
+            * `SE` - Sweden
+            * `CH` - Switzerland
+            * `SY` - Syria
+            * `TW` - Taiwan
+            * `TJ` - Tajikistan
+            * `TZ` - Tanzania
+            * `TH` - Thailand
+            * `TL` - Timor-Leste
+            * `TG` - Togo
+            * `TK` - Tokelau
+            * `TO` - Tonga
+            * `TT` - Trinidad and Tobago
+            * `TN` - Tunisia
+            * `TR` - Türkiye
+            * `TM` - Turkmenistan
+            * `TC` - Turks and Caicos Islands
+            * `TV` - Tuvalu
+            * `UG` - Uganda
+            * `UA` - Ukraine
+            * `AE` - United Arab Emirates
+            * `GB` - United Kingdom
+            * `UM` - United States Minor Outlying Islands
+            * `US` - United States of America
+            * `UY` - Uruguay
+            * `UZ` - Uzbekistan
+            * `VU` - Vanuatu
+            * `VE` - Venezuela
+            * `VN` - Vietnam
+            * `VG` - Virgin Islands (British)
+            * `VI` - Virgin Islands (U.S.)
+            * `WF` - Wallis and Futuna
+            * `EH` - Western Sahara
+            * `YE` - Yemen
+            * `ZM` - Zambia
+            * `ZW` - Zimbabwe
+        region:
+          type: string
+          title: Регион
+          description: Введите регион где находится строение(корпус)
+          maxLength: 100
+        city:
+          type: string
+          title: Город
+          description: Введите город где находится строение(корпус)
+          maxLength: 100
+        street:
+          type: string
+          title: Улица
+          description: Введите улицу где находится строение(корпус)
+          maxLength: 255
+        house_number:
+          type: string
+          title: Номер строения
+          description: Введите номер строения
+          maxLength: 100
+      required:
+      - city
+      - country
+      - house_number
+      - street
+      - title
+    BuildingsCreateUpdateRequest:
+      type: object
+      description: Сериализатор для создания/обновления здания
+      properties:
+        title:
+          type: string
+          minLength: 1
+          title: Строение(Корпус)
+          description: Введите наименование строения(корпуса)
+          maxLength: 255
+        country:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          title: Страна
+          description: |-
+            Введите страну где находится строение(корпус)
+
+            * `AF` - Afghanistan
+            * `AX` - Åland Islands
+            * `AL` - Albania
+            * `DZ` - Algeria
+            * `AS` - American Samoa
+            * `AD` - Andorra
+            * `AO` - Angola
+            * `AI` - Anguilla
+            * `AQ` - Antarctica
+            * `AG` - Antigua and Barbuda
+            * `AR` - Argentina
+            * `AM` - Armenia
+            * `AW` - Aruba
+            * `AU` - Australia
+            * `AT` - Austria
+            * `AZ` - Azerbaijan
+            * `BS` - Bahamas
+            * `BH` - Bahrain
+            * `BD` - Bangladesh
+            * `BB` - Barbados
+            * `BY` - Belarus
+            * `BE` - Belgium
+            * `BZ` - Belize
+            * `BJ` - Benin
+            * `BM` - Bermuda
+            * `BT` - Bhutan
+            * `BO` - Bolivia
+            * `BQ` - Bonaire, Sint Eustatius and Saba
+            * `BA` - Bosnia and Herzegovina
+            * `BW` - Botswana
+            * `BV` - Bouvet Island
+            * `BR` - Brazil
+            * `IO` - British Indian Ocean Territory
+            * `BN` - Brunei
+            * `BG` - Bulgaria
+            * `BF` - Burkina Faso
+            * `BI` - Burundi
+            * `CV` - Cabo Verde
+            * `KH` - Cambodia
+            * `CM` - Cameroon
+            * `CA` - Canada
+            * `KY` - Cayman Islands
+            * `CF` - Central African Republic
+            * `TD` - Chad
+            * `CL` - Chile
+            * `CN` - China
+            * `CX` - Christmas Island
+            * `CC` - Cocos (Keeling) Islands
+            * `CO` - Colombia
+            * `KM` - Comoros
+            * `CG` - Congo
+            * `CD` - Congo (the Democratic Republic of the)
+            * `CK` - Cook Islands
+            * `CR` - Costa Rica
+            * `CI` - Côte d'Ivoire
+            * `HR` - Croatia
+            * `CU` - Cuba
+            * `CW` - Curaçao
+            * `CY` - Cyprus
+            * `CZ` - Czechia
+            * `DK` - Denmark
+            * `DJ` - Djibouti
+            * `DM` - Dominica
+            * `DO` - Dominican Republic
+            * `EC` - Ecuador
+            * `EG` - Egypt
+            * `SV` - El Salvador
+            * `GQ` - Equatorial Guinea
+            * `ER` - Eritrea
+            * `EE` - Estonia
+            * `SZ` - Eswatini
+            * `ET` - Ethiopia
+            * `FK` - Falkland Islands (Malvinas)
+            * `FO` - Faroe Islands
+            * `FJ` - Fiji
+            * `FI` - Finland
+            * `FR` - France
+            * `GF` - French Guiana
+            * `PF` - French Polynesia
+            * `TF` - French Southern Territories
+            * `GA` - Gabon
+            * `GM` - Gambia
+            * `GE` - Georgia
+            * `DE` - Germany
+            * `GH` - Ghana
+            * `GI` - Gibraltar
+            * `GR` - Greece
+            * `GL` - Greenland
+            * `GD` - Grenada
+            * `GP` - Guadeloupe
+            * `GU` - Guam
+            * `GT` - Guatemala
+            * `GG` - Guernsey
+            * `GN` - Guinea
+            * `GW` - Guinea-Bissau
+            * `GY` - Guyana
+            * `HT` - Haiti
+            * `HM` - Heard Island and McDonald Islands
+            * `VA` - Holy See
+            * `HN` - Honduras
+            * `HK` - Hong Kong
+            * `HU` - Hungary
+            * `IS` - Iceland
+            * `IN` - India
+            * `ID` - Indonesia
+            * `IR` - Iran
+            * `IQ` - Iraq
+            * `IE` - Ireland
+            * `IM` - Isle of Man
+            * `IL` - Israel
+            * `IT` - Italy
+            * `JM` - Jamaica
+            * `JP` - Japan
+            * `JE` - Jersey
+            * `JO` - Jordan
+            * `KZ` - Kazakhstan
+            * `KE` - Kenya
+            * `KI` - Kiribati
+            * `KW` - Kuwait
+            * `KG` - Kyrgyzstan
+            * `LA` - Laos
+            * `LV` - Latvia
+            * `LB` - Lebanon
+            * `LS` - Lesotho
+            * `LR` - Liberia
+            * `LY` - Libya
+            * `LI` - Liechtenstein
+            * `LT` - Lithuania
+            * `LU` - Luxembourg
+            * `MO` - Macao
+            * `MG` - Madagascar
+            * `MW` - Malawi
+            * `MY` - Malaysia
+            * `MV` - Maldives
+            * `ML` - Mali
+            * `MT` - Malta
+            * `MH` - Marshall Islands
+            * `MQ` - Martinique
+            * `MR` - Mauritania
+            * `MU` - Mauritius
+            * `YT` - Mayotte
+            * `MX` - Mexico
+            * `FM` - Micronesia
+            * `MD` - Moldova
+            * `MC` - Monaco
+            * `MN` - Mongolia
+            * `ME` - Montenegro
+            * `MS` - Montserrat
+            * `MA` - Morocco
+            * `MZ` - Mozambique
+            * `MM` - Myanmar
+            * `NA` - Namibia
+            * `NR` - Nauru
+            * `NP` - Nepal
+            * `NL` - Netherlands
+            * `NC` - New Caledonia
+            * `NZ` - New Zealand
+            * `NI` - Nicaragua
+            * `NE` - Niger
+            * `NG` - Nigeria
+            * `NU` - Niue
+            * `NF` - Norfolk Island
+            * `KP` - North Korea
+            * `MK` - North Macedonia
+            * `MP` - Northern Mariana Islands
+            * `NO` - Norway
+            * `OM` - Oman
+            * `PK` - Pakistan
+            * `PW` - Palau
+            * `PS` - Palestine, State of
+            * `PA` - Panama
+            * `PG` - Papua New Guinea
+            * `PY` - Paraguay
+            * `PE` - Peru
+            * `PH` - Philippines
+            * `PN` - Pitcairn
+            * `PL` - Poland
+            * `PT` - Portugal
+            * `PR` - Puerto Rico
+            * `QA` - Qatar
+            * `RE` - Réunion
+            * `RO` - Romania
+            * `RU` - Russia
+            * `RW` - Rwanda
+            * `BL` - Saint Barthélemy
+            * `SH` - Saint Helena, Ascension and Tristan da Cunha
+            * `KN` - Saint Kitts and Nevis
+            * `LC` - Saint Lucia
+            * `MF` - Saint Martin (French part)
+            * `PM` - Saint Pierre and Miquelon
+            * `VC` - Saint Vincent and the Grenadines
+            * `WS` - Samoa
+            * `SM` - San Marino
+            * `ST` - Sao Tome and Principe
+            * `SA` - Saudi Arabia
+            * `SN` - Senegal
+            * `RS` - Serbia
+            * `SC` - Seychelles
+            * `SL` - Sierra Leone
+            * `SG` - Singapore
+            * `SX` - Sint Maarten (Dutch part)
+            * `SK` - Slovakia
+            * `SI` - Slovenia
+            * `SB` - Solomon Islands
+            * `SO` - Somalia
+            * `ZA` - South Africa
+            * `GS` - South Georgia and the South Sandwich Islands
+            * `KR` - South Korea
+            * `SS` - South Sudan
+            * `ES` - Spain
+            * `LK` - Sri Lanka
+            * `SD` - Sudan
+            * `SR` - Suriname
+            * `SJ` - Svalbard and Jan Mayen
+            * `SE` - Sweden
+            * `CH` - Switzerland
+            * `SY` - Syria
+            * `TW` - Taiwan
+            * `TJ` - Tajikistan
+            * `TZ` - Tanzania
+            * `TH` - Thailand
+            * `TL` - Timor-Leste
+            * `TG` - Togo
+            * `TK` - Tokelau
+            * `TO` - Tonga
+            * `TT` - Trinidad and Tobago
+            * `TN` - Tunisia
+            * `TR` - Türkiye
+            * `TM` - Turkmenistan
+            * `TC` - Turks and Caicos Islands
+            * `TV` - Tuvalu
+            * `UG` - Uganda
+            * `UA` - Ukraine
+            * `AE` - United Arab Emirates
+            * `GB` - United Kingdom
+            * `UM` - United States Minor Outlying Islands
+            * `US` - United States of America
+            * `UY` - Uruguay
+            * `UZ` - Uzbekistan
+            * `VU` - Vanuatu
+            * `VE` - Venezuela
+            * `VN` - Vietnam
+            * `VG` - Virgin Islands (British)
+            * `VI` - Virgin Islands (U.S.)
+            * `WF` - Wallis and Futuna
+            * `EH` - Western Sahara
+            * `YE` - Yemen
+            * `ZM` - Zambia
+            * `ZW` - Zimbabwe
+        region:
+          type: string
+          title: Регион
+          description: Введите регион где находится строение(корпус)
+          maxLength: 100
+        city:
+          type: string
+          minLength: 1
+          title: Город
+          description: Введите город где находится строение(корпус)
+          maxLength: 100
+        street:
+          type: string
+          minLength: 1
+          title: Улица
+          description: Введите улицу где находится строение(корпус)
+          maxLength: 255
+        house_number:
+          type: string
+          minLength: 1
+          title: Номер строения
+          description: Введите номер строения
+          maxLength: 100
+      required:
+      - city
+      - country
+      - house_number
+      - street
+      - title
+    BuildingsDetail:
+      type: object
+      description: Сериализатор для детальной информации о здании
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          title: Строение(Корпус)
+          description: Введите наименование строения(корпуса)
+          maxLength: 255
+        country:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          title: Страна
+          description: |-
+            Введите страну где находится строение(корпус)
+
+            * `AF` - Afghanistan
+            * `AX` - Åland Islands
+            * `AL` - Albania
+            * `DZ` - Algeria
+            * `AS` - American Samoa
+            * `AD` - Andorra
+            * `AO` - Angola
+            * `AI` - Anguilla
+            * `AQ` - Antarctica
+            * `AG` - Antigua and Barbuda
+            * `AR` - Argentina
+            * `AM` - Armenia
+            * `AW` - Aruba
+            * `AU` - Australia
+            * `AT` - Austria
+            * `AZ` - Azerbaijan
+            * `BS` - Bahamas
+            * `BH` - Bahrain
+            * `BD` - Bangladesh
+            * `BB` - Barbados
+            * `BY` - Belarus
+            * `BE` - Belgium
+            * `BZ` - Belize
+            * `BJ` - Benin
+            * `BM` - Bermuda
+            * `BT` - Bhutan
+            * `BO` - Bolivia
+            * `BQ` - Bonaire, Sint Eustatius and Saba
+            * `BA` - Bosnia and Herzegovina
+            * `BW` - Botswana
+            * `BV` - Bouvet Island
+            * `BR` - Brazil
+            * `IO` - British Indian Ocean Territory
+            * `BN` - Brunei
+            * `BG` - Bulgaria
+            * `BF` - Burkina Faso
+            * `BI` - Burundi
+            * `CV` - Cabo Verde
+            * `KH` - Cambodia
+            * `CM` - Cameroon
+            * `CA` - Canada
+            * `KY` - Cayman Islands
+            * `CF` - Central African Republic
+            * `TD` - Chad
+            * `CL` - Chile
+            * `CN` - China
+            * `CX` - Christmas Island
+            * `CC` - Cocos (Keeling) Islands
+            * `CO` - Colombia
+            * `KM` - Comoros
+            * `CG` - Congo
+            * `CD` - Congo (the Democratic Republic of the)
+            * `CK` - Cook Islands
+            * `CR` - Costa Rica
+            * `CI` - Côte d'Ivoire
+            * `HR` - Croatia
+            * `CU` - Cuba
+            * `CW` - Curaçao
+            * `CY` - Cyprus
+            * `CZ` - Czechia
+            * `DK` - Denmark
+            * `DJ` - Djibouti
+            * `DM` - Dominica
+            * `DO` - Dominican Republic
+            * `EC` - Ecuador
+            * `EG` - Egypt
+            * `SV` - El Salvador
+            * `GQ` - Equatorial Guinea
+            * `ER` - Eritrea
+            * `EE` - Estonia
+            * `SZ` - Eswatini
+            * `ET` - Ethiopia
+            * `FK` - Falkland Islands (Malvinas)
+            * `FO` - Faroe Islands
+            * `FJ` - Fiji
+            * `FI` - Finland
+            * `FR` - France
+            * `GF` - French Guiana
+            * `PF` - French Polynesia
+            * `TF` - French Southern Territories
+            * `GA` - Gabon
+            * `GM` - Gambia
+            * `GE` - Georgia
+            * `DE` - Germany
+            * `GH` - Ghana
+            * `GI` - Gibraltar
+            * `GR` - Greece
+            * `GL` - Greenland
+            * `GD` - Grenada
+            * `GP` - Guadeloupe
+            * `GU` - Guam
+            * `GT` - Guatemala
+            * `GG` - Guernsey
+            * `GN` - Guinea
+            * `GW` - Guinea-Bissau
+            * `GY` - Guyana
+            * `HT` - Haiti
+            * `HM` - Heard Island and McDonald Islands
+            * `VA` - Holy See
+            * `HN` - Honduras
+            * `HK` - Hong Kong
+            * `HU` - Hungary
+            * `IS` - Iceland
+            * `IN` - India
+            * `ID` - Indonesia
+            * `IR` - Iran
+            * `IQ` - Iraq
+            * `IE` - Ireland
+            * `IM` - Isle of Man
+            * `IL` - Israel
+            * `IT` - Italy
+            * `JM` - Jamaica
+            * `JP` - Japan
+            * `JE` - Jersey
+            * `JO` - Jordan
+            * `KZ` - Kazakhstan
+            * `KE` - Kenya
+            * `KI` - Kiribati
+            * `KW` - Kuwait
+            * `KG` - Kyrgyzstan
+            * `LA` - Laos
+            * `LV` - Latvia
+            * `LB` - Lebanon
+            * `LS` - Lesotho
+            * `LR` - Liberia
+            * `LY` - Libya
+            * `LI` - Liechtenstein
+            * `LT` - Lithuania
+            * `LU` - Luxembourg
+            * `MO` - Macao
+            * `MG` - Madagascar
+            * `MW` - Malawi
+            * `MY` - Malaysia
+            * `MV` - Maldives
+            * `ML` - Mali
+            * `MT` - Malta
+            * `MH` - Marshall Islands
+            * `MQ` - Martinique
+            * `MR` - Mauritania
+            * `MU` - Mauritius
+            * `YT` - Mayotte
+            * `MX` - Mexico
+            * `FM` - Micronesia
+            * `MD` - Moldova
+            * `MC` - Monaco
+            * `MN` - Mongolia
+            * `ME` - Montenegro
+            * `MS` - Montserrat
+            * `MA` - Morocco
+            * `MZ` - Mozambique
+            * `MM` - Myanmar
+            * `NA` - Namibia
+            * `NR` - Nauru
+            * `NP` - Nepal
+            * `NL` - Netherlands
+            * `NC` - New Caledonia
+            * `NZ` - New Zealand
+            * `NI` - Nicaragua
+            * `NE` - Niger
+            * `NG` - Nigeria
+            * `NU` - Niue
+            * `NF` - Norfolk Island
+            * `KP` - North Korea
+            * `MK` - North Macedonia
+            * `MP` - Northern Mariana Islands
+            * `NO` - Norway
+            * `OM` - Oman
+            * `PK` - Pakistan
+            * `PW` - Palau
+            * `PS` - Palestine, State of
+            * `PA` - Panama
+            * `PG` - Papua New Guinea
+            * `PY` - Paraguay
+            * `PE` - Peru
+            * `PH` - Philippines
+            * `PN` - Pitcairn
+            * `PL` - Poland
+            * `PT` - Portugal
+            * `PR` - Puerto Rico
+            * `QA` - Qatar
+            * `RE` - Réunion
+            * `RO` - Romania
+            * `RU` - Russia
+            * `RW` - Rwanda
+            * `BL` - Saint Barthélemy
+            * `SH` - Saint Helena, Ascension and Tristan da Cunha
+            * `KN` - Saint Kitts and Nevis
+            * `LC` - Saint Lucia
+            * `MF` - Saint Martin (French part)
+            * `PM` - Saint Pierre and Miquelon
+            * `VC` - Saint Vincent and the Grenadines
+            * `WS` - Samoa
+            * `SM` - San Marino
+            * `ST` - Sao Tome and Principe
+            * `SA` - Saudi Arabia
+            * `SN` - Senegal
+            * `RS` - Serbia
+            * `SC` - Seychelles
+            * `SL` - Sierra Leone
+            * `SG` - Singapore
+            * `SX` - Sint Maarten (Dutch part)
+            * `SK` - Slovakia
+            * `SI` - Slovenia
+            * `SB` - Solomon Islands
+            * `SO` - Somalia
+            * `ZA` - South Africa
+            * `GS` - South Georgia and the South Sandwich Islands
+            * `KR` - South Korea
+            * `SS` - South Sudan
+            * `ES` - Spain
+            * `LK` - Sri Lanka
+            * `SD` - Sudan
+            * `SR` - Suriname
+            * `SJ` - Svalbard and Jan Mayen
+            * `SE` - Sweden
+            * `CH` - Switzerland
+            * `SY` - Syria
+            * `TW` - Taiwan
+            * `TJ` - Tajikistan
+            * `TZ` - Tanzania
+            * `TH` - Thailand
+            * `TL` - Timor-Leste
+            * `TG` - Togo
+            * `TK` - Tokelau
+            * `TO` - Tonga
+            * `TT` - Trinidad and Tobago
+            * `TN` - Tunisia
+            * `TR` - Türkiye
+            * `TM` - Turkmenistan
+            * `TC` - Turks and Caicos Islands
+            * `TV` - Tuvalu
+            * `UG` - Uganda
+            * `UA` - Ukraine
+            * `AE` - United Arab Emirates
+            * `GB` - United Kingdom
+            * `UM` - United States Minor Outlying Islands
+            * `US` - United States of America
+            * `UY` - Uruguay
+            * `UZ` - Uzbekistan
+            * `VU` - Vanuatu
+            * `VE` - Venezuela
+            * `VN` - Vietnam
+            * `VG` - Virgin Islands (British)
+            * `VI` - Virgin Islands (U.S.)
+            * `WF` - Wallis and Futuna
+            * `EH` - Western Sahara
+            * `YE` - Yemen
+            * `ZM` - Zambia
+            * `ZW` - Zimbabwe
+        country_name:
+          type: string
+          readOnly: true
+        region:
+          type: string
+          title: Регион
+          description: Введите регион где находится строение(корпус)
+          maxLength: 100
+        city:
+          type: string
+          title: Город
+          description: Введите город где находится строение(корпус)
+          maxLength: 100
+        street:
+          type: string
+          title: Улица
+          description: Введите улицу где находится строение(корпус)
+          maxLength: 255
+        house_number:
+          type: string
+          title: Номер строения
+          description: Введите номер строения
+          maxLength: 100
+        address:
+          type: string
+          readOnly: true
+          title: Адрес строения
+          description: Введите адрес строения
+        audiences:
+          type: array
+          items:
+            $ref: '#/components/schemas/AudiencesList'
+          readOnly: true
+        audiences_count:
+          type: integer
+          readOnly: true
+      required:
+      - address
+      - audiences
+      - audiences_count
+      - city
+      - country
+      - country_name
+      - house_number
+      - id
+      - street
+      - title
+    BuildingsList:
+      type: object
+      description: Сериализатор для списка зданий (краткая информация)
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          title: Строение(Корпус)
+          description: Введите наименование строения(корпуса)
+          maxLength: 255
+        country:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          title: Страна
+          description: |-
+            Введите страну где находится строение(корпус)
+
+            * `AF` - Afghanistan
+            * `AX` - Åland Islands
+            * `AL` - Albania
+            * `DZ` - Algeria
+            * `AS` - American Samoa
+            * `AD` - Andorra
+            * `AO` - Angola
+            * `AI` - Anguilla
+            * `AQ` - Antarctica
+            * `AG` - Antigua and Barbuda
+            * `AR` - Argentina
+            * `AM` - Armenia
+            * `AW` - Aruba
+            * `AU` - Australia
+            * `AT` - Austria
+            * `AZ` - Azerbaijan
+            * `BS` - Bahamas
+            * `BH` - Bahrain
+            * `BD` - Bangladesh
+            * `BB` - Barbados
+            * `BY` - Belarus
+            * `BE` - Belgium
+            * `BZ` - Belize
+            * `BJ` - Benin
+            * `BM` - Bermuda
+            * `BT` - Bhutan
+            * `BO` - Bolivia
+            * `BQ` - Bonaire, Sint Eustatius and Saba
+            * `BA` - Bosnia and Herzegovina
+            * `BW` - Botswana
+            * `BV` - Bouvet Island
+            * `BR` - Brazil
+            * `IO` - British Indian Ocean Territory
+            * `BN` - Brunei
+            * `BG` - Bulgaria
+            * `BF` - Burkina Faso
+            * `BI` - Burundi
+            * `CV` - Cabo Verde
+            * `KH` - Cambodia
+            * `CM` - Cameroon
+            * `CA` - Canada
+            * `KY` - Cayman Islands
+            * `CF` - Central African Republic
+            * `TD` - Chad
+            * `CL` - Chile
+            * `CN` - China
+            * `CX` - Christmas Island
+            * `CC` - Cocos (Keeling) Islands
+            * `CO` - Colombia
+            * `KM` - Comoros
+            * `CG` - Congo
+            * `CD` - Congo (the Democratic Republic of the)
+            * `CK` - Cook Islands
+            * `CR` - Costa Rica
+            * `CI` - Côte d'Ivoire
+            * `HR` - Croatia
+            * `CU` - Cuba
+            * `CW` - Curaçao
+            * `CY` - Cyprus
+            * `CZ` - Czechia
+            * `DK` - Denmark
+            * `DJ` - Djibouti
+            * `DM` - Dominica
+            * `DO` - Dominican Republic
+            * `EC` - Ecuador
+            * `EG` - Egypt
+            * `SV` - El Salvador
+            * `GQ` - Equatorial Guinea
+            * `ER` - Eritrea
+            * `EE` - Estonia
+            * `SZ` - Eswatini
+            * `ET` - Ethiopia
+            * `FK` - Falkland Islands (Malvinas)
+            * `FO` - Faroe Islands
+            * `FJ` - Fiji
+            * `FI` - Finland
+            * `FR` - France
+            * `GF` - French Guiana
+            * `PF` - French Polynesia
+            * `TF` - French Southern Territories
+            * `GA` - Gabon
+            * `GM` - Gambia
+            * `GE` - Georgia
+            * `DE` - Germany
+            * `GH` - Ghana
+            * `GI` - Gibraltar
+            * `GR` - Greece
+            * `GL` - Greenland
+            * `GD` - Grenada
+            * `GP` - Guadeloupe
+            * `GU` - Guam
+            * `GT` - Guatemala
+            * `GG` - Guernsey
+            * `GN` - Guinea
+            * `GW` - Guinea-Bissau
+            * `GY` - Guyana
+            * `HT` - Haiti
+            * `HM` - Heard Island and McDonald Islands
+            * `VA` - Holy See
+            * `HN` - Honduras
+            * `HK` - Hong Kong
+            * `HU` - Hungary
+            * `IS` - Iceland
+            * `IN` - India
+            * `ID` - Indonesia
+            * `IR` - Iran
+            * `IQ` - Iraq
+            * `IE` - Ireland
+            * `IM` - Isle of Man
+            * `IL` - Israel
+            * `IT` - Italy
+            * `JM` - Jamaica
+            * `JP` - Japan
+            * `JE` - Jersey
+            * `JO` - Jordan
+            * `KZ` - Kazakhstan
+            * `KE` - Kenya
+            * `KI` - Kiribati
+            * `KW` - Kuwait
+            * `KG` - Kyrgyzstan
+            * `LA` - Laos
+            * `LV` - Latvia
+            * `LB` - Lebanon
+            * `LS` - Lesotho
+            * `LR` - Liberia
+            * `LY` - Libya
+            * `LI` - Liechtenstein
+            * `LT` - Lithuania
+            * `LU` - Luxembourg
+            * `MO` - Macao
+            * `MG` - Madagascar
+            * `MW` - Malawi
+            * `MY` - Malaysia
+            * `MV` - Maldives
+            * `ML` - Mali
+            * `MT` - Malta
+            * `MH` - Marshall Islands
+            * `MQ` - Martinique
+            * `MR` - Mauritania
+            * `MU` - Mauritius
+            * `YT` - Mayotte
+            * `MX` - Mexico
+            * `FM` - Micronesia
+            * `MD` - Moldova
+            * `MC` - Monaco
+            * `MN` - Mongolia
+            * `ME` - Montenegro
+            * `MS` - Montserrat
+            * `MA` - Morocco
+            * `MZ` - Mozambique
+            * `MM` - Myanmar
+            * `NA` - Namibia
+            * `NR` - Nauru
+            * `NP` - Nepal
+            * `NL` - Netherlands
+            * `NC` - New Caledonia
+            * `NZ` - New Zealand
+            * `NI` - Nicaragua
+            * `NE` - Niger
+            * `NG` - Nigeria
+            * `NU` - Niue
+            * `NF` - Norfolk Island
+            * `KP` - North Korea
+            * `MK` - North Macedonia
+            * `MP` - Northern Mariana Islands
+            * `NO` - Norway
+            * `OM` - Oman
+            * `PK` - Pakistan
+            * `PW` - Palau
+            * `PS` - Palestine, State of
+            * `PA` - Panama
+            * `PG` - Papua New Guinea
+            * `PY` - Paraguay
+            * `PE` - Peru
+            * `PH` - Philippines
+            * `PN` - Pitcairn
+            * `PL` - Poland
+            * `PT` - Portugal
+            * `PR` - Puerto Rico
+            * `QA` - Qatar
+            * `RE` - Réunion
+            * `RO` - Romania
+            * `RU` - Russia
+            * `RW` - Rwanda
+            * `BL` - Saint Barthélemy
+            * `SH` - Saint Helena, Ascension and Tristan da Cunha
+            * `KN` - Saint Kitts and Nevis
+            * `LC` - Saint Lucia
+            * `MF` - Saint Martin (French part)
+            * `PM` - Saint Pierre and Miquelon
+            * `VC` - Saint Vincent and the Grenadines
+            * `WS` - Samoa
+            * `SM` - San Marino
+            * `ST` - Sao Tome and Principe
+            * `SA` - Saudi Arabia
+            * `SN` - Senegal
+            * `RS` - Serbia
+            * `SC` - Seychelles
+            * `SL` - Sierra Leone
+            * `SG` - Singapore
+            * `SX` - Sint Maarten (Dutch part)
+            * `SK` - Slovakia
+            * `SI` - Slovenia
+            * `SB` - Solomon Islands
+            * `SO` - Somalia
+            * `ZA` - South Africa
+            * `GS` - South Georgia and the South Sandwich Islands
+            * `KR` - South Korea
+            * `SS` - South Sudan
+            * `ES` - Spain
+            * `LK` - Sri Lanka
+            * `SD` - Sudan
+            * `SR` - Suriname
+            * `SJ` - Svalbard and Jan Mayen
+            * `SE` - Sweden
+            * `CH` - Switzerland
+            * `SY` - Syria
+            * `TW` - Taiwan
+            * `TJ` - Tajikistan
+            * `TZ` - Tanzania
+            * `TH` - Thailand
+            * `TL` - Timor-Leste
+            * `TG` - Togo
+            * `TK` - Tokelau
+            * `TO` - Tonga
+            * `TT` - Trinidad and Tobago
+            * `TN` - Tunisia
+            * `TR` - Türkiye
+            * `TM` - Turkmenistan
+            * `TC` - Turks and Caicos Islands
+            * `TV` - Tuvalu
+            * `UG` - Uganda
+            * `UA` - Ukraine
+            * `AE` - United Arab Emirates
+            * `GB` - United Kingdom
+            * `UM` - United States Minor Outlying Islands
+            * `US` - United States of America
+            * `UY` - Uruguay
+            * `UZ` - Uzbekistan
+            * `VU` - Vanuatu
+            * `VE` - Venezuela
+            * `VN` - Vietnam
+            * `VG` - Virgin Islands (British)
+            * `VI` - Virgin Islands (U.S.)
+            * `WF` - Wallis and Futuna
+            * `EH` - Western Sahara
+            * `YE` - Yemen
+            * `ZM` - Zambia
+            * `ZW` - Zimbabwe
+        country_name:
+          type: string
+          readOnly: true
+        city:
+          type: string
+          title: Город
+          description: Введите город где находится строение(корпус)
+          maxLength: 100
+        address:
+          type: string
+          readOnly: true
+          title: Адрес строения
+          description: Введите адрес строения
+        audiences_count:
+          type: integer
+          readOnly: true
+      required:
+      - address
+      - audiences_count
+      - city
+      - country
+      - country_name
+      - id
+      - title
+    ChangePasswordRequest:
+      type: object
+      description: Сериализатор для смены пароля
+      properties:
+        old_password:
+          type: string
+          writeOnly: true
+          minLength: 1
+        new_password:
+          type: string
+          writeOnly: true
+          minLength: 1
+        new_password_confirm:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - new_password
+      - new_password_confirm
+      - old_password
+    CountryEnum:
+      enum:
+      - AF
+      - AX
+      - AL
+      - DZ
+      - AS
+      - AD
+      - AO
+      - AI
+      - AQ
+      - AG
+      - AR
+      - AM
+      - AW
+      - AU
+      - AT
+      - AZ
+      - BS
+      - BH
+      - BD
+      - BB
+      - BY
+      - BE
+      - BZ
+      - BJ
+      - BM
+      - BT
+      - BO
+      - BQ
+      - BA
+      - BW
+      - BV
+      - BR
+      - IO
+      - BN
+      - BG
+      - BF
+      - BI
+      - CV
+      - KH
+      - CM
+      - CA
+      - KY
+      - CF
+      - TD
+      - CL
+      - CN
+      - CX
+      - CC
+      - CO
+      - KM
+      - CG
+      - CD
+      - CK
+      - CR
+      - CI
+      - HR
+      - CU
+      - CW
+      - CY
+      - CZ
+      - DK
+      - DJ
+      - DM
+      - DO
+      - EC
+      - EG
+      - SV
+      - GQ
+      - ER
+      - EE
+      - SZ
+      - ET
+      - FK
+      - FO
+      - FJ
+      - FI
+      - FR
+      - GF
+      - PF
+      - TF
+      - GA
+      - GM
+      - GE
+      - DE
+      - GH
+      - GI
+      - GR
+      - GL
+      - GD
+      - GP
+      - GU
+      - GT
+      - GG
+      - GN
+      - GW
+      - GY
+      - HT
+      - HM
+      - VA
+      - HN
+      - HK
+      - HU
+      - IS
+      - IN
+      - ID
+      - IR
+      - IQ
+      - IE
+      - IM
+      - IL
+      - IT
+      - JM
+      - JP
+      - JE
+      - JO
+      - KZ
+      - KE
+      - KI
+      - KW
+      - KG
+      - LA
+      - LV
+      - LB
+      - LS
+      - LR
+      - LY
+      - LI
+      - LT
+      - LU
+      - MO
+      - MG
+      - MW
+      - MY
+      - MV
+      - ML
+      - MT
+      - MH
+      - MQ
+      - MR
+      - MU
+      - YT
+      - MX
+      - FM
+      - MD
+      - MC
+      - MN
+      - ME
+      - MS
+      - MA
+      - MZ
+      - MM
+      - NA
+      - NR
+      - NP
+      - NL
+      - NC
+      - NZ
+      - NI
+      - NE
+      - NG
+      - NU
+      - NF
+      - KP
+      - MK
+      - MP
+      - 'NO'
+      - OM
+      - PK
+      - PW
+      - PS
+      - PA
+      - PG
+      - PY
+      - PE
+      - PH
+      - PN
+      - PL
+      - PT
+      - PR
+      - QA
+      - RE
+      - RO
+      - RU
+      - RW
+      - BL
+      - SH
+      - KN
+      - LC
+      - MF
+      - PM
+      - VC
+      - WS
+      - SM
+      - ST
+      - SA
+      - SN
+      - RS
+      - SC
+      - SL
+      - SG
+      - SX
+      - SK
+      - SI
+      - SB
+      - SO
+      - ZA
+      - GS
+      - KR
+      - SS
+      - ES
+      - LK
+      - SD
+      - SR
+      - SJ
+      - SE
+      - CH
+      - SY
+      - TW
+      - TJ
+      - TZ
+      - TH
+      - TL
+      - TG
+      - TK
+      - TO
+      - TT
+      - TN
+      - TR
+      - TM
+      - TC
+      - TV
+      - UG
+      - UA
+      - AE
+      - GB
+      - UM
+      - US
+      - UY
+      - UZ
+      - VU
+      - VE
+      - VN
+      - VG
+      - VI
+      - WF
+      - EH
+      - YE
+      - ZM
+      - ZW
+      type: string
+      description: |-
+        * `AF` - Afghanistan
+        * `AX` - Åland Islands
+        * `AL` - Albania
+        * `DZ` - Algeria
+        * `AS` - American Samoa
+        * `AD` - Andorra
+        * `AO` - Angola
+        * `AI` - Anguilla
+        * `AQ` - Antarctica
+        * `AG` - Antigua and Barbuda
+        * `AR` - Argentina
+        * `AM` - Armenia
+        * `AW` - Aruba
+        * `AU` - Australia
+        * `AT` - Austria
+        * `AZ` - Azerbaijan
+        * `BS` - Bahamas
+        * `BH` - Bahrain
+        * `BD` - Bangladesh
+        * `BB` - Barbados
+        * `BY` - Belarus
+        * `BE` - Belgium
+        * `BZ` - Belize
+        * `BJ` - Benin
+        * `BM` - Bermuda
+        * `BT` - Bhutan
+        * `BO` - Bolivia
+        * `BQ` - Bonaire, Sint Eustatius and Saba
+        * `BA` - Bosnia and Herzegovina
+        * `BW` - Botswana
+        * `BV` - Bouvet Island
+        * `BR` - Brazil
+        * `IO` - British Indian Ocean Territory
+        * `BN` - Brunei
+        * `BG` - Bulgaria
+        * `BF` - Burkina Faso
+        * `BI` - Burundi
+        * `CV` - Cabo Verde
+        * `KH` - Cambodia
+        * `CM` - Cameroon
+        * `CA` - Canada
+        * `KY` - Cayman Islands
+        * `CF` - Central African Republic
+        * `TD` - Chad
+        * `CL` - Chile
+        * `CN` - China
+        * `CX` - Christmas Island
+        * `CC` - Cocos (Keeling) Islands
+        * `CO` - Colombia
+        * `KM` - Comoros
+        * `CG` - Congo
+        * `CD` - Congo (the Democratic Republic of the)
+        * `CK` - Cook Islands
+        * `CR` - Costa Rica
+        * `CI` - Côte d'Ivoire
+        * `HR` - Croatia
+        * `CU` - Cuba
+        * `CW` - Curaçao
+        * `CY` - Cyprus
+        * `CZ` - Czechia
+        * `DK` - Denmark
+        * `DJ` - Djibouti
+        * `DM` - Dominica
+        * `DO` - Dominican Republic
+        * `EC` - Ecuador
+        * `EG` - Egypt
+        * `SV` - El Salvador
+        * `GQ` - Equatorial Guinea
+        * `ER` - Eritrea
+        * `EE` - Estonia
+        * `SZ` - Eswatini
+        * `ET` - Ethiopia
+        * `FK` - Falkland Islands (Malvinas)
+        * `FO` - Faroe Islands
+        * `FJ` - Fiji
+        * `FI` - Finland
+        * `FR` - France
+        * `GF` - French Guiana
+        * `PF` - French Polynesia
+        * `TF` - French Southern Territories
+        * `GA` - Gabon
+        * `GM` - Gambia
+        * `GE` - Georgia
+        * `DE` - Germany
+        * `GH` - Ghana
+        * `GI` - Gibraltar
+        * `GR` - Greece
+        * `GL` - Greenland
+        * `GD` - Grenada
+        * `GP` - Guadeloupe
+        * `GU` - Guam
+        * `GT` - Guatemala
+        * `GG` - Guernsey
+        * `GN` - Guinea
+        * `GW` - Guinea-Bissau
+        * `GY` - Guyana
+        * `HT` - Haiti
+        * `HM` - Heard Island and McDonald Islands
+        * `VA` - Holy See
+        * `HN` - Honduras
+        * `HK` - Hong Kong
+        * `HU` - Hungary
+        * `IS` - Iceland
+        * `IN` - India
+        * `ID` - Indonesia
+        * `IR` - Iran
+        * `IQ` - Iraq
+        * `IE` - Ireland
+        * `IM` - Isle of Man
+        * `IL` - Israel
+        * `IT` - Italy
+        * `JM` - Jamaica
+        * `JP` - Japan
+        * `JE` - Jersey
+        * `JO` - Jordan
+        * `KZ` - Kazakhstan
+        * `KE` - Kenya
+        * `KI` - Kiribati
+        * `KW` - Kuwait
+        * `KG` - Kyrgyzstan
+        * `LA` - Laos
+        * `LV` - Latvia
+        * `LB` - Lebanon
+        * `LS` - Lesotho
+        * `LR` - Liberia
+        * `LY` - Libya
+        * `LI` - Liechtenstein
+        * `LT` - Lithuania
+        * `LU` - Luxembourg
+        * `MO` - Macao
+        * `MG` - Madagascar
+        * `MW` - Malawi
+        * `MY` - Malaysia
+        * `MV` - Maldives
+        * `ML` - Mali
+        * `MT` - Malta
+        * `MH` - Marshall Islands
+        * `MQ` - Martinique
+        * `MR` - Mauritania
+        * `MU` - Mauritius
+        * `YT` - Mayotte
+        * `MX` - Mexico
+        * `FM` - Micronesia
+        * `MD` - Moldova
+        * `MC` - Monaco
+        * `MN` - Mongolia
+        * `ME` - Montenegro
+        * `MS` - Montserrat
+        * `MA` - Morocco
+        * `MZ` - Mozambique
+        * `MM` - Myanmar
+        * `NA` - Namibia
+        * `NR` - Nauru
+        * `NP` - Nepal
+        * `NL` - Netherlands
+        * `NC` - New Caledonia
+        * `NZ` - New Zealand
+        * `NI` - Nicaragua
+        * `NE` - Niger
+        * `NG` - Nigeria
+        * `NU` - Niue
+        * `NF` - Norfolk Island
+        * `KP` - North Korea
+        * `MK` - North Macedonia
+        * `MP` - Northern Mariana Islands
+        * `NO` - Norway
+        * `OM` - Oman
+        * `PK` - Pakistan
+        * `PW` - Palau
+        * `PS` - Palestine, State of
+        * `PA` - Panama
+        * `PG` - Papua New Guinea
+        * `PY` - Paraguay
+        * `PE` - Peru
+        * `PH` - Philippines
+        * `PN` - Pitcairn
+        * `PL` - Poland
+        * `PT` - Portugal
+        * `PR` - Puerto Rico
+        * `QA` - Qatar
+        * `RE` - Réunion
+        * `RO` - Romania
+        * `RU` - Russia
+        * `RW` - Rwanda
+        * `BL` - Saint Barthélemy
+        * `SH` - Saint Helena, Ascension and Tristan da Cunha
+        * `KN` - Saint Kitts and Nevis
+        * `LC` - Saint Lucia
+        * `MF` - Saint Martin (French part)
+        * `PM` - Saint Pierre and Miquelon
+        * `VC` - Saint Vincent and the Grenadines
+        * `WS` - Samoa
+        * `SM` - San Marino
+        * `ST` - Sao Tome and Principe
+        * `SA` - Saudi Arabia
+        * `SN` - Senegal
+        * `RS` - Serbia
+        * `SC` - Seychelles
+        * `SL` - Sierra Leone
+        * `SG` - Singapore
+        * `SX` - Sint Maarten (Dutch part)
+        * `SK` - Slovakia
+        * `SI` - Slovenia
+        * `SB` - Solomon Islands
+        * `SO` - Somalia
+        * `ZA` - South Africa
+        * `GS` - South Georgia and the South Sandwich Islands
+        * `KR` - South Korea
+        * `SS` - South Sudan
+        * `ES` - Spain
+        * `LK` - Sri Lanka
+        * `SD` - Sudan
+        * `SR` - Suriname
+        * `SJ` - Svalbard and Jan Mayen
+        * `SE` - Sweden
+        * `CH` - Switzerland
+        * `SY` - Syria
+        * `TW` - Taiwan
+        * `TJ` - Tajikistan
+        * `TZ` - Tanzania
+        * `TH` - Thailand
+        * `TL` - Timor-Leste
+        * `TG` - Togo
+        * `TK` - Tokelau
+        * `TO` - Tonga
+        * `TT` - Trinidad and Tobago
+        * `TN` - Tunisia
+        * `TR` - Türkiye
+        * `TM` - Turkmenistan
+        * `TC` - Turks and Caicos Islands
+        * `TV` - Tuvalu
+        * `UG` - Uganda
+        * `UA` - Ukraine
+        * `AE` - United Arab Emirates
+        * `GB` - United Kingdom
+        * `UM` - United States Minor Outlying Islands
+        * `US` - United States of America
+        * `UY` - Uruguay
+        * `UZ` - Uzbekistan
+        * `VU` - Vanuatu
+        * `VE` - Venezuela
+        * `VN` - Vietnam
+        * `VG` - Virgin Islands (British)
+        * `VI` - Virgin Islands (U.S.)
+        * `WF` - Wallis and Futuna
+        * `EH` - Western Sahara
+        * `YE` - Yemen
+        * `ZM` - Zambia
+        * `ZW` - Zimbabwe
+    Day:
+      type: object
+      description: Сериализатор для дней недели
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          title: Наименование
+          description: Введите наименование дня недели
+          maxLength: 31
+      required:
+      - id
+      - title
+    DayRequest:
+      type: object
+      description: Сериализатор для дней недели
+      properties:
+        title:
+          type: string
+          minLength: 1
+          title: Наименование
+          description: Введите наименование дня недели
+          maxLength: 31
+      required:
+      - title
+    GenderEnum:
+      enum:
+      - M
+      - F
+      - N
+      type: string
+      description: |-
+        * `M` - Male
+        * `F` - Female
+        * `N` - Not specified
+    NullEnum:
+      enum:
+      - null
+    PaginatedAudiencesListList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AudiencesList'
+    PaginatedAudiencesTypesList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AudiencesTypes'
+    PaginatedBuildingsListList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/BuildingsList'
+    PaginatedDayList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Day'
+    PaginatedStudentList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Student'
+    PaginatedStudyGroupsListList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/StudyGroupsList'
+    PaginatedSubjectScheduleListList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubjectScheduleList'
+    PaginatedSubjectsListList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubjectsList'
+    PaginatedSubjectsTypesList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubjectsTypes'
+    PaginatedTeacherList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Teacher'
+    PaginatedTimeSlotList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeSlot'
+    PaginatedUserList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+    PatchedAudiencesCreateUpdateRequest:
+      type: object
+      description: Сериализатор для создания/обновления аудитории
+      properties:
+        auditorium_number:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          title: Номер аудитории
+          description: Введите номер аудитории
+        auditorium_type:
+          type: integer
+          title: Тип аудитории
+          description: Выберите тип аудитории
+        floor_number:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          title: Этаж
+          description: Введите этаж на котором находиться аудитория
+        building:
+          type: integer
+          title: Строение(Корпус)
+          description: Выберите строение(корпус) в котором находится аудитория
+        title:
+          type: string
+          title: Введите название аудитории
+          description: Название (если не указано — сформируется автоматически)
+          maxLength: 63
+    PatchedAudiencesTypesRequest:
+      type: object
+      description: Сериализатор для типов аудиторий
+      properties:
+        title:
+          type: string
+          minLength: 1
+          title: Название
+          description: Введите название типа
+          maxLength: 63
+    PatchedBuildingsCreateUpdateRequest:
+      type: object
+      description: Сериализатор для создания/обновления здания
+      properties:
+        title:
+          type: string
+          minLength: 1
+          title: Строение(Корпус)
+          description: Введите наименование строения(корпуса)
+          maxLength: 255
+        country:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          title: Страна
+          description: |-
+            Введите страну где находится строение(корпус)
+
+            * `AF` - Afghanistan
+            * `AX` - Åland Islands
+            * `AL` - Albania
+            * `DZ` - Algeria
+            * `AS` - American Samoa
+            * `AD` - Andorra
+            * `AO` - Angola
+            * `AI` - Anguilla
+            * `AQ` - Antarctica
+            * `AG` - Antigua and Barbuda
+            * `AR` - Argentina
+            * `AM` - Armenia
+            * `AW` - Aruba
+            * `AU` - Australia
+            * `AT` - Austria
+            * `AZ` - Azerbaijan
+            * `BS` - Bahamas
+            * `BH` - Bahrain
+            * `BD` - Bangladesh
+            * `BB` - Barbados
+            * `BY` - Belarus
+            * `BE` - Belgium
+            * `BZ` - Belize
+            * `BJ` - Benin
+            * `BM` - Bermuda
+            * `BT` - Bhutan
+            * `BO` - Bolivia
+            * `BQ` - Bonaire, Sint Eustatius and Saba
+            * `BA` - Bosnia and Herzegovina
+            * `BW` - Botswana
+            * `BV` - Bouvet Island
+            * `BR` - Brazil
+            * `IO` - British Indian Ocean Territory
+            * `BN` - Brunei
+            * `BG` - Bulgaria
+            * `BF` - Burkina Faso
+            * `BI` - Burundi
+            * `CV` - Cabo Verde
+            * `KH` - Cambodia
+            * `CM` - Cameroon
+            * `CA` - Canada
+            * `KY` - Cayman Islands
+            * `CF` - Central African Republic
+            * `TD` - Chad
+            * `CL` - Chile
+            * `CN` - China
+            * `CX` - Christmas Island
+            * `CC` - Cocos (Keeling) Islands
+            * `CO` - Colombia
+            * `KM` - Comoros
+            * `CG` - Congo
+            * `CD` - Congo (the Democratic Republic of the)
+            * `CK` - Cook Islands
+            * `CR` - Costa Rica
+            * `CI` - Côte d'Ivoire
+            * `HR` - Croatia
+            * `CU` - Cuba
+            * `CW` - Curaçao
+            * `CY` - Cyprus
+            * `CZ` - Czechia
+            * `DK` - Denmark
+            * `DJ` - Djibouti
+            * `DM` - Dominica
+            * `DO` - Dominican Republic
+            * `EC` - Ecuador
+            * `EG` - Egypt
+            * `SV` - El Salvador
+            * `GQ` - Equatorial Guinea
+            * `ER` - Eritrea
+            * `EE` - Estonia
+            * `SZ` - Eswatini
+            * `ET` - Ethiopia
+            * `FK` - Falkland Islands (Malvinas)
+            * `FO` - Faroe Islands
+            * `FJ` - Fiji
+            * `FI` - Finland
+            * `FR` - France
+            * `GF` - French Guiana
+            * `PF` - French Polynesia
+            * `TF` - French Southern Territories
+            * `GA` - Gabon
+            * `GM` - Gambia
+            * `GE` - Georgia
+            * `DE` - Germany
+            * `GH` - Ghana
+            * `GI` - Gibraltar
+            * `GR` - Greece
+            * `GL` - Greenland
+            * `GD` - Grenada
+            * `GP` - Guadeloupe
+            * `GU` - Guam
+            * `GT` - Guatemala
+            * `GG` - Guernsey
+            * `GN` - Guinea
+            * `GW` - Guinea-Bissau
+            * `GY` - Guyana
+            * `HT` - Haiti
+            * `HM` - Heard Island and McDonald Islands
+            * `VA` - Holy See
+            * `HN` - Honduras
+            * `HK` - Hong Kong
+            * `HU` - Hungary
+            * `IS` - Iceland
+            * `IN` - India
+            * `ID` - Indonesia
+            * `IR` - Iran
+            * `IQ` - Iraq
+            * `IE` - Ireland
+            * `IM` - Isle of Man
+            * `IL` - Israel
+            * `IT` - Italy
+            * `JM` - Jamaica
+            * `JP` - Japan
+            * `JE` - Jersey
+            * `JO` - Jordan
+            * `KZ` - Kazakhstan
+            * `KE` - Kenya
+            * `KI` - Kiribati
+            * `KW` - Kuwait
+            * `KG` - Kyrgyzstan
+            * `LA` - Laos
+            * `LV` - Latvia
+            * `LB` - Lebanon
+            * `LS` - Lesotho
+            * `LR` - Liberia
+            * `LY` - Libya
+            * `LI` - Liechtenstein
+            * `LT` - Lithuania
+            * `LU` - Luxembourg
+            * `MO` - Macao
+            * `MG` - Madagascar
+            * `MW` - Malawi
+            * `MY` - Malaysia
+            * `MV` - Maldives
+            * `ML` - Mali
+            * `MT` - Malta
+            * `MH` - Marshall Islands
+            * `MQ` - Martinique
+            * `MR` - Mauritania
+            * `MU` - Mauritius
+            * `YT` - Mayotte
+            * `MX` - Mexico
+            * `FM` - Micronesia
+            * `MD` - Moldova
+            * `MC` - Monaco
+            * `MN` - Mongolia
+            * `ME` - Montenegro
+            * `MS` - Montserrat
+            * `MA` - Morocco
+            * `MZ` - Mozambique
+            * `MM` - Myanmar
+            * `NA` - Namibia
+            * `NR` - Nauru
+            * `NP` - Nepal
+            * `NL` - Netherlands
+            * `NC` - New Caledonia
+            * `NZ` - New Zealand
+            * `NI` - Nicaragua
+            * `NE` - Niger
+            * `NG` - Nigeria
+            * `NU` - Niue
+            * `NF` - Norfolk Island
+            * `KP` - North Korea
+            * `MK` - North Macedonia
+            * `MP` - Northern Mariana Islands
+            * `NO` - Norway
+            * `OM` - Oman
+            * `PK` - Pakistan
+            * `PW` - Palau
+            * `PS` - Palestine, State of
+            * `PA` - Panama
+            * `PG` - Papua New Guinea
+            * `PY` - Paraguay
+            * `PE` - Peru
+            * `PH` - Philippines
+            * `PN` - Pitcairn
+            * `PL` - Poland
+            * `PT` - Portugal
+            * `PR` - Puerto Rico
+            * `QA` - Qatar
+            * `RE` - Réunion
+            * `RO` - Romania
+            * `RU` - Russia
+            * `RW` - Rwanda
+            * `BL` - Saint Barthélemy
+            * `SH` - Saint Helena, Ascension and Tristan da Cunha
+            * `KN` - Saint Kitts and Nevis
+            * `LC` - Saint Lucia
+            * `MF` - Saint Martin (French part)
+            * `PM` - Saint Pierre and Miquelon
+            * `VC` - Saint Vincent and the Grenadines
+            * `WS` - Samoa
+            * `SM` - San Marino
+            * `ST` - Sao Tome and Principe
+            * `SA` - Saudi Arabia
+            * `SN` - Senegal
+            * `RS` - Serbia
+            * `SC` - Seychelles
+            * `SL` - Sierra Leone
+            * `SG` - Singapore
+            * `SX` - Sint Maarten (Dutch part)
+            * `SK` - Slovakia
+            * `SI` - Slovenia
+            * `SB` - Solomon Islands
+            * `SO` - Somalia
+            * `ZA` - South Africa
+            * `GS` - South Georgia and the South Sandwich Islands
+            * `KR` - South Korea
+            * `SS` - South Sudan
+            * `ES` - Spain
+            * `LK` - Sri Lanka
+            * `SD` - Sudan
+            * `SR` - Suriname
+            * `SJ` - Svalbard and Jan Mayen
+            * `SE` - Sweden
+            * `CH` - Switzerland
+            * `SY` - Syria
+            * `TW` - Taiwan
+            * `TJ` - Tajikistan
+            * `TZ` - Tanzania
+            * `TH` - Thailand
+            * `TL` - Timor-Leste
+            * `TG` - Togo
+            * `TK` - Tokelau
+            * `TO` - Tonga
+            * `TT` - Trinidad and Tobago
+            * `TN` - Tunisia
+            * `TR` - Türkiye
+            * `TM` - Turkmenistan
+            * `TC` - Turks and Caicos Islands
+            * `TV` - Tuvalu
+            * `UG` - Uganda
+            * `UA` - Ukraine
+            * `AE` - United Arab Emirates
+            * `GB` - United Kingdom
+            * `UM` - United States Minor Outlying Islands
+            * `US` - United States of America
+            * `UY` - Uruguay
+            * `UZ` - Uzbekistan
+            * `VU` - Vanuatu
+            * `VE` - Venezuela
+            * `VN` - Vietnam
+            * `VG` - Virgin Islands (British)
+            * `VI` - Virgin Islands (U.S.)
+            * `WF` - Wallis and Futuna
+            * `EH` - Western Sahara
+            * `YE` - Yemen
+            * `ZM` - Zambia
+            * `ZW` - Zimbabwe
+        region:
+          type: string
+          title: Регион
+          description: Введите регион где находится строение(корпус)
+          maxLength: 100
+        city:
+          type: string
+          minLength: 1
+          title: Город
+          description: Введите город где находится строение(корпус)
+          maxLength: 100
+        street:
+          type: string
+          minLength: 1
+          title: Улица
+          description: Введите улицу где находится строение(корпус)
+          maxLength: 255
+        house_number:
+          type: string
+          minLength: 1
+          title: Номер строения
+          description: Введите номер строения
+          maxLength: 100
+    PatchedDayRequest:
+      type: object
+      description: Сериализатор для дней недели
+      properties:
+        title:
+          type: string
+          minLength: 1
+          title: Наименование
+          description: Введите наименование дня недели
+          maxLength: 31
+    PatchedStudyGroupsCreateUpdateRequest:
+      type: object
+      description: Сериализатор для создания/обновления учебной группы
+      properties:
+        title:
+          type: string
+          minLength: 1
+          title: Наименование учебной группы
+          description: Введите Наименование учебной группы
+          maxLength: 50
+        description:
+          type: string
+          minLength: 1
+          title: Описание учебной группы
+          description: Введите описание(дополнительную информацию) об учебной группе
+        faculty:
+          type: string
+          title: Факультет
+          description: Факультет, к которому относится группа
+          maxLength: 255
+        course:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          nullable: true
+          title: Курс
+          description: Курс обучения (1-6)
+        is_active:
+          type: boolean
+          title: Активна
+          description: Действующая группа или нет
+        student_ids:
+          type: array
+          items:
+            type: integer
+            writeOnly: true
+          writeOnly: true
+    PatchedSubjectScheduleCreateUpdateRequest:
+      type: object
+      description: Сериализатор для создания/обновления расписания предмета
+      properties:
+        subject:
+          type: integer
+          title: Предмет
+          description: Выберите предмет
+        week_day:
+          type: integer
+          title: День недели
+          description: Выберите день недели
+        time_slot:
+          type: integer
+          title: Временной слот (пара)
+          description: Выберите номер пары
+        week_type:
+          allOf:
+          - $ref: '#/components/schemas/WeekTypeEnum'
+          default: Все
+          title: Тип недели
+          description: |-
+            Выберите тип недели
+
+            * `Четные` - Четные
+            * `Нечетные` - Нечетные
+            * `Все` - Все
+        teacher_ids:
+          type: array
+          items:
+            type: integer
+            writeOnly: true
+          writeOnly: true
+        group_ids:
+          type: array
+          items:
+            type: integer
+            writeOnly: true
+          writeOnly: true
+    PatchedSubjectsCreateUpdateRequest:
+      type: object
+      description: Сериализатор для создания/обновления предмета
+      properties:
+        title:
+          type: string
+          minLength: 1
+          title: Название предмета
+          description: Введите название предмета
+          maxLength: 255
+        subject_type:
+          type: integer
+          title: Тип предмета
+          description: Выберите тип предмета
+        audience:
+          type: integer
+          title: Аудитория
+          description: Выберите аудиторию
+    PatchedSubjectsTypesRequest:
+      type: object
+      description: Сериализатор для типов предметов
+      properties:
+        title:
+          type: string
+          minLength: 1
+          title: Наименование
+          description: Введите наименование типа
+          maxLength: 127
+    PatchedTimeSlotRequest:
+      type: object
+      description: Сериализатор для временных слотов (пар)
+      properties:
+        number:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          title: Номер пары
+          description: Введите номер пары (1, 2, 3...)
+        start_time:
+          type: string
+          format: time
+          title: Время начала
+          description: Введите время начала пары
+        end_time:
+          type: string
+          format: time
+          title: Время окончания
+          description: Введите время окончания пары
+    PatchedUserUpdateRequest:
+      type: object
+      description: Сериализатор для обновления информации о пользователе
+      properties:
+        first_name:
+          type: string
+          title: Имя
+          maxLength: 150
+        last_name:
+          type: string
+          title: Фамилия
+          maxLength: 150
+        gender:
+          $ref: '#/components/schemas/GenderEnum'
+        email:
+          type: string
+          format: email
+          title: Адрес электронной почты
+          maxLength: 254
+    RemoveStudents:
+      type: object
+      description: Сериализатор для удаления студентов из группы
+      properties:
+        student_ids:
+          type: array
+          items:
+            type: integer
+      required:
+      - student_ids
+    RemoveStudentsRequest:
+      type: object
+      description: Сериализатор для удаления студентов из группы
+      properties:
+        student_ids:
+          type: array
+          items:
+            type: integer
+      required:
+      - student_ids
+    RoleEnum:
+      enum:
+      - STUDENT
+      - TEACHER
+      - STAFF
+      type: string
+      description: |-
+        * `STUDENT` - Student
+        * `TEACHER` - Teacher
+        * `STAFF` - Staff
+    ScheduleGenerationRequestRequest:
+      type: object
+      description: Сериализатор запроса на генерацию расписания
+      properties:
+        group_ids:
+          type: array
+          items:
+            type: integer
+          description: Список ID групп для генерации расписания
+        clear_existing:
+          type: boolean
+          default: false
+          description: Очистить существующее расписание перед генерацией
+        prefer_morning:
+          type: boolean
+          default: true
+          description: Приоритет утренних пар
+        time_range:
+          nullable: true
+          description: |-
+            Предустановленный временной промежуток: morning (08:00-14:30), mixed (11:30-17:00), afternoon (13:00-18:20), evening (16:00-21:00), full (весь день)
+
+            * `morning` - morning
+            * `mixed` - mixed
+            * `afternoon` - afternoon
+            * `evening` - evening
+            * `full` - full
+          oneOf:
+          - $ref: '#/components/schemas/TimeRangeEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        custom_start_time:
+          type: string
+          format: time
+          nullable: true
+          description: Кастомное время начала (HH:MM), имеет приоритет над time_range
+        custom_end_time:
+          type: string
+          format: time
+          nullable: true
+          description: Кастомное время окончания (HH:MM), требует custom_start_time
+      required:
+      - group_ids
+    ScheduleGenerationResponse:
+      type: object
+      description: Сериализатор ответа на генерацию расписания
+      properties:
+        success:
+          type: boolean
+        messages:
+          type: array
+          items:
+            type: string
+        statistics:
+          type: object
+          additionalProperties: {}
+      required:
+      - messages
+      - statistics
+      - success
+    ScheduleStatistics:
+      type: object
+      description: Сериализатор статистики расписания
+      properties:
+        total_groups:
+          type: integer
+        total_subjects:
+          type: integer
+        subjects_with_schedule:
+          type: integer
+        subjects_without_schedule:
+          type: integer
+        total_schedule_slots:
+          type: integer
+        average_slots_per_subject:
+          type: number
+          format: double
+      required:
+      - average_slots_per_subject
+      - subjects_with_schedule
+      - subjects_without_schedule
+      - total_groups
+      - total_schedule_slots
+      - total_subjects
+    ScheduleValidationResponse:
+      type: object
+      description: Сериализатор ответа на валидацию расписания
+      properties:
+        is_valid:
+          type: boolean
+        conflicts:
+          type: array
+          items:
+            type: string
+      required:
+      - conflicts
+      - is_valid
+    Student:
+      type: object
+      description: Сериализатор для студентов
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          title: Имя пользователя
+          description: Обязательное поле. Не более 150 символов. Только буквы, цифры
+            и символы @/./+/-/_.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          title: Адрес электронной почты
+          maxLength: 254
+        first_name:
+          type: string
+          title: Имя
+          maxLength: 150
+        last_name:
+          type: string
+          title: Фамилия
+          maxLength: 150
+        gender:
+          $ref: '#/components/schemas/GenderEnum'
+        is_active:
+          type: boolean
+          title: Активный
+          description: Отметьте, если пользователь должен считаться активным. Уберите
+            эту отметку вместо удаления учётной записи.
+        study_groups:
+          type: array
+          items:
+            type: string
+          readOnly: true
+      required:
+      - id
+      - study_groups
+      - username
+    StudentBrief:
+      type: object
+      description: Краткая информация о студенте для отображения в группе
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          readOnly: true
+          title: Имя пользователя
+          description: Обязательное поле. Не более 150 символов. Только буквы, цифры
+            и символы @/./+/-/_.
+        email:
+          type: string
+          format: email
+          readOnly: true
+          title: Адрес электронной почты
+        first_name:
+          type: string
+          readOnly: true
+          title: Имя
+        last_name:
+          type: string
+          readOnly: true
+          title: Фамилия
+        full_name:
+          type: string
+          readOnly: true
+      required:
+      - email
+      - first_name
+      - full_name
+      - id
+      - last_name
+      - username
+    StudyGroupsCreateUpdate:
+      type: object
+      description: Сериализатор для создания/обновления учебной группы
+      properties:
+        title:
+          type: string
+          title: Наименование учебной группы
+          description: Введите Наименование учебной группы
+          maxLength: 50
+        description:
+          type: string
+          title: Описание учебной группы
+          description: Введите описание(дополнительную информацию) об учебной группе
+        faculty:
+          type: string
+          title: Факультет
+          description: Факультет, к которому относится группа
+          maxLength: 255
+        course:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          nullable: true
+          title: Курс
+          description: Курс обучения (1-6)
+        is_active:
+          type: boolean
+          title: Активна
+          description: Действующая группа или нет
+      required:
+      - description
+      - title
+    StudyGroupsCreateUpdateRequest:
+      type: object
+      description: Сериализатор для создания/обновления учебной группы
+      properties:
+        title:
+          type: string
+          minLength: 1
+          title: Наименование учебной группы
+          description: Введите Наименование учебной группы
+          maxLength: 50
+        description:
+          type: string
+          minLength: 1
+          title: Описание учебной группы
+          description: Введите описание(дополнительную информацию) об учебной группе
+        faculty:
+          type: string
+          title: Факультет
+          description: Факультет, к которому относится группа
+          maxLength: 255
+        course:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          nullable: true
+          title: Курс
+          description: Курс обучения (1-6)
+        is_active:
+          type: boolean
+          title: Активна
+          description: Действующая группа или нет
+        student_ids:
+          type: array
+          items:
+            type: integer
+            writeOnly: true
+          writeOnly: true
+      required:
+      - description
+      - title
+    StudyGroupsDetail:
+      type: object
+      description: Сериализатор для детальной информации об учебной группе
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          title: Наименование учебной группы
+          description: Введите Наименование учебной группы
+          maxLength: 50
+        description:
+          type: string
+          title: Описание учебной группы
+          description: Введите описание(дополнительную информацию) об учебной группе
+        faculty:
+          type: string
+          title: Факультет
+          description: Факультет, к которому относится группа
+          maxLength: 255
+        course:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          nullable: true
+          title: Курс
+          description: Курс обучения (1-6)
+        is_active:
+          type: boolean
+          title: Активна
+          description: Действующая группа или нет
+        students:
+          type: array
+          items:
+            $ref: '#/components/schemas/StudentBrief'
+          readOnly: true
+        students_count:
+          type: integer
+          readOnly: true
+      required:
+      - description
+      - id
+      - students
+      - students_count
+      - title
+    StudyGroupsDetailRequest:
+      type: object
+      description: Сериализатор для детальной информации об учебной группе
+      properties:
+        title:
+          type: string
+          minLength: 1
+          title: Наименование учебной группы
+          description: Введите Наименование учебной группы
+          maxLength: 50
+        description:
+          type: string
+          minLength: 1
+          title: Описание учебной группы
+          description: Введите описание(дополнительную информацию) об учебной группе
+        faculty:
+          type: string
+          title: Факультет
+          description: Факультет, к которому относится группа
+          maxLength: 255
+        course:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          nullable: true
+          title: Курс
+          description: Курс обучения (1-6)
+        is_active:
+          type: boolean
+          title: Активна
+          description: Действующая группа или нет
+      required:
+      - description
+      - title
+    StudyGroupsList:
+      type: object
+      description: Сериализатор для списка учебных групп (краткая информация)
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          title: Наименование учебной группы
+          description: Введите Наименование учебной группы
+          maxLength: 50
+        description:
+          type: string
+          title: Описание учебной группы
+          description: Введите описание(дополнительную информацию) об учебной группе
+        faculty:
+          type: string
+          title: Факультет
+          description: Факультет, к которому относится группа
+          maxLength: 255
+        course:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          nullable: true
+          title: Курс
+          description: Курс обучения (1-6)
+        is_active:
+          type: boolean
+          title: Активна
+          description: Действующая группа или нет
+        students_count:
+          type: integer
+          readOnly: true
+      required:
+      - description
+      - id
+      - students_count
+      - title
+    SubjectScheduleCreateUpdate:
+      type: object
+      description: Сериализатор для создания/обновления расписания предмета
+      properties:
+        subject:
+          type: integer
+          title: Предмет
+          description: Выберите предмет
+        week_day:
+          type: integer
+          title: День недели
+          description: Выберите день недели
+        time_slot:
+          type: integer
+          title: Временной слот (пара)
+          description: Выберите номер пары
+        week_type:
+          allOf:
+          - $ref: '#/components/schemas/WeekTypeEnum'
+          default: Все
+          title: Тип недели
+          description: |-
+            Выберите тип недели
+
+            * `Четные` - Четные
+            * `Нечетные` - Нечетные
+            * `Все` - Все
+      required:
+      - subject
+      - time_slot
+      - week_day
+    SubjectScheduleCreateUpdateRequest:
+      type: object
+      description: Сериализатор для создания/обновления расписания предмета
+      properties:
+        subject:
+          type: integer
+          title: Предмет
+          description: Выберите предмет
+        week_day:
+          type: integer
+          title: День недели
+          description: Выберите день недели
+        time_slot:
+          type: integer
+          title: Временной слот (пара)
+          description: Выберите номер пары
+        week_type:
+          allOf:
+          - $ref: '#/components/schemas/WeekTypeEnum'
+          default: Все
+          title: Тип недели
+          description: |-
+            Выберите тип недели
+
+            * `Четные` - Четные
+            * `Нечетные` - Нечетные
+            * `Все` - Все
+        teacher_ids:
+          type: array
+          items:
+            type: integer
+            writeOnly: true
+          writeOnly: true
+        group_ids:
+          type: array
+          items:
+            type: integer
+            writeOnly: true
+          writeOnly: true
+      required:
+      - subject
+      - time_slot
+      - week_day
+    SubjectScheduleDetail:
+      type: object
+      description: Сериализатор для детальной информации о расписании предмета
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        subject:
+          type: integer
+          title: Предмет
+          description: Выберите предмет
+        week_day:
+          type: integer
+          title: День недели
+          description: Выберите день недели
+        week_day_details:
+          allOf:
+          - $ref: '#/components/schemas/Day'
+          readOnly: true
+        time_slot:
+          type: integer
+          title: Временной слот (пара)
+          description: Выберите номер пары
+        time_slot_details:
+          allOf:
+          - $ref: '#/components/schemas/TimeSlot'
+          readOnly: true
+        week_type:
+          allOf:
+          - $ref: '#/components/schemas/WeekTypeEnum'
+          default: Все
+          title: Тип недели
+          description: |-
+            Выберите тип недели
+
+            * `Четные` - Четные
+            * `Нечетные` - Нечетные
+            * `Все` - Все
+        teachers:
+          type: array
+          items:
+            type: integer
+            title: Преподаватели
+          title: Преподаватели
+          description: Выберите преподавателей для этого занятия
+        teachers_details:
+          type: string
+          readOnly: true
+        groups:
+          type: array
+          items:
+            type: integer
+            title: Учебные группы
+          title: Учебные группы
+          description: Выберите учебные группы для этого занятия
+        groups_details:
+          type: string
+          readOnly: true
+      required:
+      - groups
+      - groups_details
+      - id
+      - subject
+      - teachers
+      - teachers_details
+      - time_slot
+      - time_slot_details
+      - week_day
+      - week_day_details
+    SubjectScheduleList:
+      type: object
+      description: Сериализатор для расписания предмета (краткая информация)
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        subject:
+          type: integer
+          title: Предмет
+          description: Выберите предмет
+        subject_title:
+          type: string
+          readOnly: true
+        subject_type:
+          type: string
+          readOnly: true
+        week_day:
+          type: integer
+          title: День недели
+          description: Выберите день недели
+        week_day_name:
+          type: string
+          readOnly: true
+        time_slot:
+          type: integer
+          title: Временной слот (пара)
+          description: Выберите номер пары
+        time_slot_display:
+          type: string
+          readOnly: true
+        week_type:
+          allOf:
+          - $ref: '#/components/schemas/WeekTypeEnum'
+          default: Все
+          title: Тип недели
+          description: |-
+            Выберите тип недели
+
+            * `Четные` - Четные
+            * `Нечетные` - Нечетные
+            * `Все` - Все
+        audience_details:
+          type: string
+          readOnly: true
+        teachers_details:
+          type: string
+          readOnly: true
+        groups_details:
+          type: string
+          readOnly: true
+      required:
+      - audience_details
+      - groups_details
+      - id
+      - subject
+      - subject_title
+      - subject_type
+      - teachers_details
+      - time_slot
+      - time_slot_display
+      - week_day
+      - week_day_name
+    SubjectsCreateUpdate:
+      type: object
+      description: Сериализатор для создания/обновления предмета
+      properties:
+        title:
+          type: string
+          title: Название предмета
+          description: Введите название предмета
+          maxLength: 255
+        subject_type:
+          type: integer
+          title: Тип предмета
+          description: Выберите тип предмета
+        audience:
+          type: integer
+          title: Аудитория
+          description: Выберите аудиторию
+      required:
+      - audience
+      - subject_type
+      - title
+    SubjectsCreateUpdateRequest:
+      type: object
+      description: Сериализатор для создания/обновления предмета
+      properties:
+        title:
+          type: string
+          minLength: 1
+          title: Название предмета
+          description: Введите название предмета
+          maxLength: 255
+        subject_type:
+          type: integer
+          title: Тип предмета
+          description: Выберите тип предмета
+        audience:
+          type: integer
+          title: Аудитория
+          description: Выберите аудиторию
+      required:
+      - audience
+      - subject_type
+      - title
+    SubjectsDetail:
+      type: object
+      description: Сериализатор для детальной информации о предмете
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          title: Название предмета
+          description: Введите название предмета
+          maxLength: 255
+        subject_type:
+          type: integer
+          title: Тип предмета
+          description: Выберите тип предмета
+        subject_type_details:
+          allOf:
+          - $ref: '#/components/schemas/SubjectsTypes'
+          readOnly: true
+        schedule_details:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubjectScheduleList'
+          readOnly: true
+        audience:
+          type: integer
+          title: Аудитория
+          description: Выберите аудиторию
+        audience_details:
+          type: string
+          readOnly: true
+      required:
+      - audience
+      - audience_details
+      - id
+      - schedule_details
+      - subject_type
+      - subject_type_details
+      - title
+    SubjectsList:
+      type: object
+      description: Сериализатор для списка предметов (краткая информация)
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          title: Название предмета
+          description: Введите название предмета
+          maxLength: 255
+        subject_type:
+          type: integer
+          title: Тип предмета
+          description: Выберите тип предмета
+        subject_type_name:
+          type: string
+          readOnly: true
+        audience:
+          type: integer
+          title: Аудитория
+          description: Выберите аудиторию
+        audience_name:
+          type: string
+          readOnly: true
+        schedules_count:
+          type: string
+          readOnly: true
+      required:
+      - audience
+      - audience_name
+      - id
+      - schedules_count
+      - subject_type
+      - subject_type_name
+      - title
+    SubjectsTypes:
+      type: object
+      description: Сериализатор для типов предметов
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          title: Наименование
+          description: Введите наименование типа
+          maxLength: 127
+      required:
+      - id
+      - title
+    SubjectsTypesRequest:
+      type: object
+      description: Сериализатор для типов предметов
+      properties:
+        title:
+          type: string
+          minLength: 1
+          title: Наименование
+          description: Введите наименование типа
+          maxLength: 127
+      required:
+      - title
+    Teacher:
+      type: object
+      description: Сериализатор для преподавателей
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          title: Имя пользователя
+          description: Обязательное поле. Не более 150 символов. Только буквы, цифры
+            и символы @/./+/-/_.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          title: Адрес электронной почты
+          maxLength: 254
+        department:
+          type: string
+          title: Кафедра
+          description: Кафедра преподавателя
+          maxLength: 255
+        phone:
+          type: string
+          title: Телефон
+          description: Контактный телефон
+          maxLength: 20
+        office:
+          type: string
+          title: Кабинет
+          description: Номер кабинета преподавателя
+          maxLength: 50
+        first_name:
+          type: string
+          title: Имя
+          maxLength: 150
+        last_name:
+          type: string
+          title: Фамилия
+          maxLength: 150
+        gender:
+          $ref: '#/components/schemas/GenderEnum'
+        is_active:
+          type: boolean
+          title: Активный
+          description: Отметьте, если пользователь должен считаться активным. Уберите
+            эту отметку вместо удаления учётной записи.
+      required:
+      - id
+      - username
+    TimeRange:
+      type: object
+      description: Сериализатор для временного промежутка
+      properties:
+        name:
+          type: string
+        start_time:
+          type: string
+        end_time:
+          type: string
+        description:
+          type: string
+      required:
+      - description
+      - end_time
+      - name
+      - start_time
+    TimeRangeEnum:
+      enum:
+      - morning
+      - mixed
+      - afternoon
+      - evening
+      - full
+      type: string
+      description: |-
+        * `morning` - morning
+        * `mixed` - mixed
+        * `afternoon` - afternoon
+        * `evening` - evening
+        * `full` - full
+    TimeSlot:
+      type: object
+      description: Сериализатор для временных слотов (пар)
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        number:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          title: Номер пары
+          description: Введите номер пары (1, 2, 3...)
+        start_time:
+          type: string
+          format: time
+          title: Время начала
+          description: Введите время начала пары
+        end_time:
+          type: string
+          format: time
+          title: Время окончания
+          description: Введите время окончания пары
+        display_name:
+          type: string
+          readOnly: true
+      required:
+      - display_name
+      - end_time
+      - id
+      - number
+      - start_time
+    TimeSlotRequest:
+      type: object
+      description: Сериализатор для временных слотов (пар)
+      properties:
+        number:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          title: Номер пары
+          description: Введите номер пары (1, 2, 3...)
+        start_time:
+          type: string
+          format: time
+          title: Время начала
+          description: Введите время начала пары
+        end_time:
+          type: string
+          format: time
+          title: Время окончания
+          description: Введите время окончания пары
+      required:
+      - end_time
+      - number
+      - start_time
+    TokenObtainPair:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          readOnly: true
+      required:
+      - access
+      - refresh
+    TokenObtainPairRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          writeOnly: true
+          minLength: 1
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - password
+      - username
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+      required:
+      - access
+    TokenRefreshRequest:
+      type: object
+      properties:
+        refresh:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - refresh
+    TokenVerifyRequest:
+      type: object
+      properties:
+        token:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - token
+    User:
+      type: object
+      description: Сериализатор для отображения информации о пользователе
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          title: Имя пользователя
+          description: Обязательное поле. Не более 150 символов. Только буквы, цифры
+            и символы @/./+/-/_.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          title: Адрес электронной почты
+          maxLength: 254
+        first_name:
+          type: string
+          title: Имя
+          maxLength: 150
+        last_name:
+          type: string
+          title: Фамилия
+          maxLength: 150
+        gender:
+          $ref: '#/components/schemas/GenderEnum'
+        role:
+          $ref: '#/components/schemas/RoleEnum'
+        department:
+          type: string
+          title: Кафедра
+          description: Кафедра преподавателя
+          maxLength: 255
+        phone:
+          type: string
+          title: Телефон
+          description: Контактный телефон
+          maxLength: 20
+        office:
+          type: string
+          title: Кабинет
+          description: Номер кабинета преподавателя
+          maxLength: 50
+        is_active:
+          type: boolean
+          title: Активный
+          description: Отметьте, если пользователь должен считаться активным. Уберите
+            эту отметку вместо удаления учётной записи.
+        date_joined:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Дата регистрации
+        is_staff:
+          type: boolean
+          title: Статус персонала
+          description: Отметьте, если пользователь может входить в административную
+            часть сайта.
+      required:
+      - date_joined
+      - id
+      - username
+    UserCreate:
+      type: object
+      description: Сериализатор для создания нового пользователя
+      properties:
+        username:
+          type: string
+          title: Имя пользователя
+          description: Обязательное поле. Не более 150 символов. Только буквы, цифры
+            и символы @/./+/-/_.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          title: Адрес электронной почты
+          maxLength: 254
+        first_name:
+          type: string
+          title: Имя
+          maxLength: 150
+        last_name:
+          type: string
+          title: Фамилия
+          maxLength: 150
+        gender:
+          $ref: '#/components/schemas/GenderEnum'
+        role:
+          $ref: '#/components/schemas/RoleEnum'
+        department:
+          type: string
+          title: Кафедра
+          description: Кафедра преподавателя
+          maxLength: 255
+        phone:
+          type: string
+          title: Телефон
+          description: Контактный телефон
+          maxLength: 20
+        office:
+          type: string
+          title: Кабинет
+          description: Номер кабинета преподавателя
+          maxLength: 50
+      required:
+      - username
+    UserCreateRequest:
+      type: object
+      description: Сериализатор для создания нового пользователя
+      properties:
+        username:
+          type: string
+          minLength: 1
+          title: Имя пользователя
+          description: Обязательное поле. Не более 150 символов. Только буквы, цифры
+            и символы @/./+/-/_.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          title: Адрес электронной почты
+          maxLength: 254
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+        password_confirm:
+          type: string
+          writeOnly: true
+          minLength: 1
+        first_name:
+          type: string
+          title: Имя
+          maxLength: 150
+        last_name:
+          type: string
+          title: Фамилия
+          maxLength: 150
+        gender:
+          $ref: '#/components/schemas/GenderEnum'
+        role:
+          $ref: '#/components/schemas/RoleEnum'
+        department:
+          type: string
+          title: Кафедра
+          description: Кафедра преподавателя
+          maxLength: 255
+        phone:
+          type: string
+          title: Телефон
+          description: Контактный телефон
+          maxLength: 20
+        office:
+          type: string
+          title: Кабинет
+          description: Номер кабинета преподавателя
+          maxLength: 50
+      required:
+      - password
+      - password_confirm
+      - username
+    UserUpdate:
+      type: object
+      description: Сериализатор для обновления информации о пользователе
+      properties:
+        first_name:
+          type: string
+          title: Имя
+          maxLength: 150
+        last_name:
+          type: string
+          title: Фамилия
+          maxLength: 150
+        gender:
+          $ref: '#/components/schemas/GenderEnum'
+        email:
+          type: string
+          format: email
+          title: Адрес электронной почты
+          maxLength: 254
+    UserUpdateRequest:
+      type: object
+      description: Сериализатор для обновления информации о пользователе
+      properties:
+        first_name:
+          type: string
+          title: Имя
+          maxLength: 150
+        last_name:
+          type: string
+          title: Фамилия
+          maxLength: 150
+        gender:
+          $ref: '#/components/schemas/GenderEnum'
+        email:
+          type: string
+          format: email
+          title: Адрес электронной почты
+          maxLength: 254
+    WeekTypeEnum:
+      enum:
+      - Четные
+      - Нечетные
+      - Все
+      type: string
+      description: |-
+        * `Четные` - Четные
+        * `Нечетные` - Нечетные
+        * `Все` - Все
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

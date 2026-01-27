@@ -1,21 +1,15 @@
 import { apiClient } from './client';
-import type { User, Student, Teacher, PaginatedResponse } from '@/features/schedule/types';
+import type { User, Student, Teacher, UserCreateRequest, PaginatedResponse } from '@/features/schedule/types';
 
 export const usersApi = {
-  /**
-   * Получить текущего пользователя
-   */
-  getMe: async (): Promise<User> => {
-    const response = await apiClient.get<User>('/users/me/');
-    return response.data;
-  },
-
   /**
    * Получить список всех пользователей
    */
   getAll: async (params?: {
     page?: number;
+    page_size?: number;
     search?: string;
+    role?: 'STUDENT' | 'TEACHER';
     ordering?: string;
   }): Promise<PaginatedResponse<User>> => {
     const response = await apiClient.get<PaginatedResponse<User>>('/users/', { params });
@@ -29,6 +23,45 @@ export const usersApi = {
     const response = await apiClient.get<User>(`/users/${id}/`);
     return response.data;
   },
+
+  /**
+   * Создать пользователя
+   */
+  create: async (data: UserCreateRequest): Promise<User> => {
+    const response = await apiClient.post<User>('/users/', data);
+    return response.data;
+  },
+
+  /**
+   * Обновить пользователя
+   */
+  update: async (id: number, data: Partial<UserCreateRequest>): Promise<User> => {
+    const response = await apiClient.put<User>(`/users/${id}/`, data);
+    return response.data;
+  },
+
+  /**
+   * Частично обновить пользователя
+   */
+  partialUpdate: async (id: number, data: Partial<User>): Promise<User> => {
+    const response = await apiClient.patch<User>(`/users/${id}/`, data);
+    return response.data;
+  },
+
+  /**
+   * Удалить пользователя
+   */
+  delete: async (id: number): Promise<void> => {
+    await apiClient.delete(`/users/${id}/`);
+  },
+
+  /**
+   * Получить текущего пользователя
+   */
+  getMe: async (): Promise<User> => {
+    const response = await apiClient.get<User>('/users/me/');
+    return response.data;
+  },
 };
 
 export const studentsApi = {
@@ -37,6 +70,7 @@ export const studentsApi = {
    */
   getAll: async (params?: {
     page?: number;
+    page_size?: number;
     search?: string;
     ordering?: string;
   }): Promise<PaginatedResponse<Student>> => {
@@ -51,14 +85,6 @@ export const studentsApi = {
     const response = await apiClient.get<Student>(`/students/${id}/`);
     return response.data;
   },
-
-  /**
-   * Получить группы студента
-   */
-  getStudyGroups: async (id: number) => {
-    const response = await apiClient.get(`/students/${id}/study_groups/`);
-    return response.data;
-  },
 };
 
 export const teachersApi = {
@@ -67,6 +93,7 @@ export const teachersApi = {
    */
   getAll: async (params?: {
     page?: number;
+    page_size?: number;
     search?: string;
     ordering?: string;
   }): Promise<PaginatedResponse<Teacher>> => {

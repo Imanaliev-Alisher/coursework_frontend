@@ -1,0 +1,23 @@
+# Development Dockerfile с hot reload
+
+FROM node:18-alpine
+
+# Установка pnpm
+RUN corepack enable && corepack prepare pnpm@9.15.4 --activate
+
+WORKDIR /app
+
+# Копируем файлы зависимостей
+COPY package.json pnpm-lock.yaml ./
+
+# Устанавливаем зависимости
+RUN pnpm install --frozen-lockfile
+
+# Копируем исходный код
+COPY . .
+
+# Экспонируем порт Vite
+EXPOSE 5173
+
+# Запуск dev-сервера
+CMD ["pnpm", "dev", "--host", "0.0.0.0"]

@@ -1,13 +1,18 @@
-export { apiClient } from './client';
+export { apiClient, setNavigationCallback } from './client';
 export { authApi } from './auth';
-export { subjectsApi } from './subjects';
 export { groupsApi } from './groups';
 export { usersApi, studentsApi, teachersApi } from './users';
-export { audiencesApi, buildingsApi } from './audiences';
-export { subjectTypesApi, timeSlotsApi, daysApi, schedulesApi } from './schedules';
+export { audiencesApi, buildingsApi, audienceTypesApi } from './audiences';
+export {
+  subjectTypesApi,
+  timeSlotsApi,
+  daysApi,
+  subjectsApi,
+  subjectSchedulesApi,
+  scheduleOverridesApi,
+  scheduleGeneratorApi,
+} from './schedules';
 
 export type { LoginRequest, LoginResponse } from './auth';
-export type { SubjectCreateUpdateRequest } from './subjects';
-export type { StudyGroupCreateUpdateRequest } from './groups';
-export type { Audience, AudienceType, Building } from './audiences';
-export type { SubjectType, TimeSlot, Day, Schedule, ScheduleCreateUpdateRequest } from './schedules';
+export type { StudyGroupCreateRequest } from '@/features/schedule/types';
+export type { SubjectCreateRequest as SubjectCreateUpdateRequest } from '@/features/schedule/types';
