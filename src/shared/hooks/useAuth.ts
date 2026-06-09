@@ -6,23 +6,17 @@ import { authApi, type LoginRequest } from '@/shared/api';
  */
 export function useLogin() {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: async (data: LoginRequest) => {
-      // Очищаем старую сессию перед входом
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('refresh_token');
-      
-      // Очищаем весь кэш React Query (удаляем данные предыдущего пользователя)
+      sessionStorage.removeItem('access_token');
+      sessionStorage.removeItem('refresh_token');
       queryClient.clear();
-      
-      // Выполняем вход
       return authApi.login(data);
     },
     onSuccess: (data) => {
-      // Сохраняем новые токены
-      localStorage.setItem('access_token', data.access);
-      localStorage.setItem('refresh_token', data.refresh);
+      sessionStorage.setItem('access_token', data.access);
+      sessionStorage.setItem('refresh_token', data.refresh);
     },
   });
 }
@@ -32,14 +26,19 @@ export function useLogin() {
  */
 export function useLogout() {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: async () => {
-      // Удаляем токены
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('refresh_token');
-      
-      // Очищаем весь кэш React Query
+      const refreshToken = sessionStorage.getItem('refresh_token');
+      if (refreshToken) {
+        try {
+          await authApi.logout(refreshToken);
+        } catch {
+          // игнорируем ошибку сервера — локальную сессию всё равно очищаем
+        }
+      }
+      sessionStorage.removeItem('access_token');
+      sessionStorage.removeItem('refresh_token');
       queryClient.clear();
     },
   });
@@ -49,5 +48,5 @@ export function useLogout() {
  * Проверка, авторизован ли пользователь
  */
 export function useIsAuthenticated(): boolean {
-  return !!localStorage.getItem('access_token');
+  return !!sessionStorage.getItem('access_token');
 }

@@ -41,4 +41,11 @@ export const authApi = {
   verifyToken: async (token: string): Promise<void> => {
     await apiClient.post('/auth/token/verify/', { token });
   },
+
+  /**
+   * Выйти из системы (инвалидировать refresh-токен на сервере)
+   */
+  logout: async (refreshToken: string): Promise<void> => {
+    await apiClient.post('/users/logout/', { refresh: refreshToken });
+  },
 };

@@ -63,7 +63,7 @@ export const router: ReturnType<typeof createBrowserRouter> = createBrowserRoute
       {
         path: '/admin',
         element: (
-          <ProtectedRoute>
+          <ProtectedRoute requireAdmin>
             <AdminShell />
           </ProtectedRoute>
         ),
