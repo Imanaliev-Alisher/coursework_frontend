@@ -5,6 +5,7 @@ import { Badge } from '../shared/ui/Badge';
 import { useToast } from '@/shared/ui/Toast';
 import { WEEK_DAYS } from '@/shared/constants/weekDays';
 import type { WeekType } from '@/shared/constants/weekTypes';
+import { getApiErrorMessage } from '@/shared/utils/apiError';
 
 function typeBadge(type: string | undefined) {
   if (!type) return <Badge className="bg-gray-50 text-gray-700 border-gray-100 dark:bg-gray-900/30 dark:text-gray-300 dark:border-gray-800">Неизвестно</Badge>;
@@ -77,8 +78,7 @@ export function AdminSchedulePage() {
       await deleteSchedule.mutateAsync(id);
       showToast('Занятие успешно удалено', 'success');
     } catch (error) {
-      console.error('Ошибка удаления:', error);
-      showToast('Ошибка при удалении занятия', 'error');
+      showToast(getApiErrorMessage(error, 'Ошибка при удалении занятия'), 'error');
     }
   };
 

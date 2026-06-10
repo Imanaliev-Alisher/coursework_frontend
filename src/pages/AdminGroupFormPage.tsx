@@ -2,6 +2,8 @@ import { useState, useEffect, FormEvent, useMemo } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useGroup, useCreateGroup, useUpdateGroup, useStudents } from '@/shared/hooks';
 import type { StudyGroupCreateRequest } from '@/features/schedule/types';
+import { useToast } from '@/shared/ui/Toast';
+import { getApiErrorMessage } from '@/shared/utils/apiError';
 
 export function AdminGroupFormPage(props: { mode: 'create' | 'edit' }) {
   const params = useParams();
@@ -12,6 +14,7 @@ export function AdminGroupFormPage(props: { mode: 'create' | 'edit' }) {
   const { data: group, isLoading: isLoadingGroup } = useGroup(groupId);
   const createGroup = useCreateGroup();
   const updateGroup = useUpdateGroup();
+  const { showToast } = useToast();
   
   const [studentSearch, setStudentSearch] = useState('');
   const { data: studentsData, isLoading: isLoadingStudents } = useStudents({ 
@@ -52,7 +55,7 @@ export function AdminGroupFormPage(props: { mode: 'create' | 'edit' }) {
       }
       navigate('/admin/groups');
     } catch (error) {
-      console.error('Ошибка сохранения:', error);
+      showToast(getApiErrorMessage(error, 'Ошибка при сохранении группы'), 'error');
     }
   };
 

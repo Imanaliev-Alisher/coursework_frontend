@@ -2,6 +2,7 @@ import { useState, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGroups, useScheduleGenerator, useDays, useSubjects } from '@/shared/hooks';
 import { useToast } from '@/shared/ui/Toast';
+import { getApiErrorMessage } from '@/shared/utils/apiError';
 
 export function AdminScheduleGeneratorPage() {
   const [selectedGroupId, setSelectedGroupId] = useState<number>(0);
@@ -63,7 +64,7 @@ export function AdminScheduleGeneratorPage() {
       navigate('/admin/schedule');
     } catch (error: any) {
       console.error('Ошибка генерации:', error);
-      showToast(error.response?.data?.detail || 'Ошибка при генерации расписания', 'error');
+      showToast(getApiErrorMessage(error, 'Ошибка при генерации расписания'), 'error');
     }
   };
 

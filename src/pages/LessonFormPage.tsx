@@ -14,6 +14,7 @@ import {
 } from '@/shared/hooks';
 import type { SubjectCreateRequest } from '@/features/schedule/types';
 import { useToast } from '@/shared/ui/Toast';
+import { getApiErrorMessage } from '@/shared/utils/apiError';
 
 // Extended form data type
 type SubjectFormData = SubjectCreateRequest & {
@@ -122,8 +123,7 @@ export function LessonFormPage(props: { mode: 'create' | 'edit' }) {
       }
       navigate('/admin/schedule');
     } catch (error) {
-      console.error('Ошибка сохранения:', error);
-      showToast('Ошибка при сохранении', 'error');
+      showToast(getApiErrorMessage(error, 'Ошибка при сохранении'), 'error');
     }
   };
 

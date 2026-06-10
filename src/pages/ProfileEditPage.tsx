@@ -2,6 +2,7 @@ import { useState, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCurrentUser, useUpdateProfile } from '@/shared/hooks';
 import { useToast } from '@/shared/ui/Toast';
+import { getApiErrorMessage } from '@/shared/utils/apiError';
 
 export function ProfileEditPage() {
   const navigate = useNavigate();
@@ -24,8 +25,7 @@ export function ProfileEditPage() {
       showToast('Профиль успешно обновлён', 'success');
       navigate(-1);
     } catch (error) {
-      console.error('Ошибка обновления профиля:', error);
-      showToast('Ошибка при обновлении профиля', 'error');
+      showToast(getApiErrorMessage(error, 'Ошибка при обновлении профиля'), 'error');
     }
   };
 
